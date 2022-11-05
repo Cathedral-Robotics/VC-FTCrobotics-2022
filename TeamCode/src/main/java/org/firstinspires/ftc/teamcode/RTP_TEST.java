@@ -15,7 +15,7 @@ public class RTP_TEST extends LinearOpMode {
     @Override
     public void runOpMode() {
         DcMotor motorLeftLift = hardwareMap.dcMotor.get("motorLeftLift");
-        DcMotor motorRightLift = hardwareMap.dcMotor.get("motorLeftLift");
+        DcMotor motorRightLift = hardwareMap.dcMotor.get("motorRightLift");
 
 
         motorLeftLift.setTargetPosition(0);
@@ -40,23 +40,23 @@ public class RTP_TEST extends LinearOpMode {
 
 
             if (gamepad2.left_bumper) {
-                ArmTarget = 100; //intaking
+                ArmTarget = 3750; //intaking
             }
             else if (gamepad2.dpad_down) {
-                ArmTarget = 200; //Low level
+                ArmTarget = 3900; //Low level
             }
             else if (gamepad2.dpad_up) {
-                ArmTarget = 300; //Mid level
+                ArmTarget = 4050; //Mid level
             }
             else if (gamepad2.right_bumper) {
-                ArmTarget = 400; //High level
+                ArmTarget = 4400; //High level
             }
 
             //stuff for arm position control
-            motorLeftLift.setTargetPosition(ArmTarget);
+            motorLeftLift.setTargetPosition(-1*ArmTarget);
             motorRightLift.setTargetPosition(ArmTarget);
-            motorLeftLift.setPower(.75);
-            motorRightLift.setPower(.75);
+            motorLeftLift.setPower(.5);
+            motorRightLift.setPower(.5);
 
             telemetry.addData("Left Lift Position", motorLeftLift.getCurrentPosition());
             telemetry.addData("Right Lift Position", motorRightLift.getCurrentPosition());

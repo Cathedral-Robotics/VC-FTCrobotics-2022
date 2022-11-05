@@ -29,14 +29,14 @@ public class CR_Servo extends LinearOpMode {
         while (opModeIsActive()) {
             //MECHANISM CODE
 
-           if (gamepad2.right_trigger>=.3 && gamepad2.left_trigger <=.3 ) {
+           if (gamepad2.left_trigger >.5 ) {
            servoIntake.setPower(1);
            }
-            else if (gamepad2.right_trigger<.3 && gamepad2.left_trigger >.3 ) {
-                servoIntake.setPower(0);
+           if (gamepad2.right_trigger >.5 ) {
+                servoIntake.setPower(-1);
             }
-            else{
-                servoIntake.setPower(0.5);
+            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5){
+                servoIntake.setPower(0);
             }
             telemetry.update();
         }
