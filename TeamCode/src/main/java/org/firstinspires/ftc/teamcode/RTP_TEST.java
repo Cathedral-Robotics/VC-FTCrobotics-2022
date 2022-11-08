@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 @TeleOp
+@Disabled
 
 public class RTP_TEST extends LinearOpMode {
 
@@ -56,6 +57,7 @@ public class RTP_TEST extends LinearOpMode {
             motorLeftLift.setTargetPosition(-1*ArmTarget);
             motorRightLift.setTargetPosition(ArmTarget);
             motorLeftLift.setPower(.5);
+
             motorRightLift.setPower(.5);
 
             telemetry.addData("Left Lift Position", motorLeftLift.getCurrentPosition());

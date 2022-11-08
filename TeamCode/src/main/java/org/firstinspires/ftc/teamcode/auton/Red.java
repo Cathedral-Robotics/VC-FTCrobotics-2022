@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,6 +17,8 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 import java.util.ArrayList;
 
 @Autonomous
+
+
 public class Red extends LinearOpMode
 {OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
@@ -200,9 +203,9 @@ public class Red extends LinearOpMode
 
             }else if(tagOfInterest.id == MIDDLE){
 
-                motorFrontLeft.setPower(.25);
+                motorFrontLeft.setPower(.268);
                 motorBackLeft.setPower(-.25);
-                motorFrontRight.setPower(-.25);
+                motorFrontRight.setPower(-.268);
                 motorBackRight.setPower(.25);
                 sleep(4500);
 

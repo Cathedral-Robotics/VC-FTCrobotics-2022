@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 @TeleOp
+@Disabled
 
 public class CR_Servo extends LinearOpMode {
     private CRServo servoIntake;
