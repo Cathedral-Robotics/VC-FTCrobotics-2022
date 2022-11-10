@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 
 @TeleOp
-public class MecanumTeleOp extends LinearOpMode {
+public class template extends LinearOpMode {
     private CRServo servoIntake;
 
 
@@ -51,66 +51,6 @@ public class MecanumTeleOp extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-            double y = gamepad1.left_stick_y; // Remember, this is reversed!
-            double x = -gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
-            double rx = -gamepad1.right_stick_x;
-
-            // Denominator is the largest motor power (absolute value) or 1
-            // This ensures all the powers maintain the same ratio, but only when
-            // at least one is out of the range [-1, 1]
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
-
-            motorFrontLeft.setPower(frontLeftPower);
-            motorBackLeft.setPower(backLeftPower);
-            motorFrontRight.setPower(frontRightPower);
-            motorBackRight.setPower(backRightPower);
-
-            if (gamepad2.left_trigger >.5 ) {
-                servoIntake.setPower(1);
-            }
-            if (gamepad2.right_trigger >.5 ) {
-                servoIntake.setPower(-1);
-            }
-
-            if (ArmTarget == 135) {
-                servoIntake.setPower(-1);
-            }
-
-            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5 && ArmTarget != 135){
-                servoIntake.setPower(0);
-            }
-
-
-            //MECHANISM CODE
-//134.4 ticks per rotation
-// max extension at 8.7 * 134.4
-
-
-            if (gamepad2.left_bumper) {
-                ArmTarget = 135; //intaking
-            }
-            else if (gamepad2.dpad_down) {
-                ArmTarget = 1700; //Low level
-            }
-            else if (gamepad2.dpad_up) {
-                ArmTarget = 2900; //Mid level
-            }
-            else if (gamepad2.right_bumper) {
-                ArmTarget = 4100; //High level (4400 max)
-            }
-
-            if (gamepad2.y) {
-                ArmTarget = ArmTarget + 100;
-            }
-
-            if (gamepad2.a) {
-                ArmTarget = ArmTarget - 100;
-            }
-
             //stuff for arm position control
             motorLeftLift.setTargetPosition(-1*ArmTarget);
             motorRightLift.setTargetPosition(ArmTarget);
