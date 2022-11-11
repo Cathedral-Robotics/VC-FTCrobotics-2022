@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
-@TeleOp
-public class MecanumTeleOp extends LinearOpMode {
+@Autonomous
+
+public class AnderTest extends LinearOpMode {
     private CRServo servoIntake;
 
 
@@ -51,67 +54,6 @@ public class MecanumTeleOp extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-            double y = gamepad1.left_stick_y; // Remember, this is reversed!
-            double x = -gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
-            double rx = -gamepad1.right_stick_x;
-
-            // Denominator is the largest motor power (absolute value) or 1
-            // This ensures all the powers maintain the same ratio, but only when
-            // at least one is out of the range [-1, 1]
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
-
-            motorFrontLeft.setPower(frontLeftPower);
-            motorBackLeft.setPower(backLeftPower);
-            motorFrontRight.setPower(frontRightPower);
-            motorBackRight.setPower(backRightPower);
-
-            if (gamepad2.left_trigger >.5 ) {
-                servoIntake.setPower(1);
-            }
-            if (gamepad2.right_trigger >.5 ) {
-                servoIntake.setPower(-1);
-            }
-
-            if (ArmTarget == 135) {
-                servoIntake.setPower(-1);
-            }
-
-            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5 && ArmTarget != 135){
-                servoIntake.setPower(0);
-            }
-
-
-            //MECHANISM CODE
-//134.4 ticks per rotation
-// max extension at 8.7 * 134.4
-
-
-            if (gamepad2.left_bumper) {
-                ArmTarget = 135; //intaking
-            }
-            else if (gamepad2.dpad_down) {
-                ArmTarget = 1700; //Low level
-            }
-            else if (gamepad2.dpad_up) {
-                ArmTarget = 2900; //Mid level
-            }
-            else if (gamepad2.right_bumper) {
-                ArmTarget = 4100; //High level (4400 max)
-            }
-
-            if (gamepad2.y) {
-                ArmTarget = ArmTarget + 100;
-            }
-
-            if (gamepad2.a) {
-                ArmTarget = ArmTarget - 100;
-            }
-
-
             //stuff for arm position control
             motorLeftLift.setTargetPosition(-1*ArmTarget);
             motorRightLift.setTargetPosition(ArmTarget);
@@ -120,9 +62,20 @@ public class MecanumTeleOp extends LinearOpMode {
 
             telemetry.addData("Left Lift Position", motorLeftLift.getCurrentPosition());
             telemetry.addData("Right Lift Position", motorRightLift.getCurrentPosition());
-
-
             telemetry.update();
+
+
+            motorFrontLeft.setPower(.25);
+            motorBackLeft.setPower(-.25);
+            motorFrontRight.setPower(.25);
+            motorBackRight.setPower(-.25);
+            sleep(4500);
+
+            motorFrontLeft.setPower(0);
+            motorBackLeft.setPower(0);
+            motorFrontRight.setPower(0);
+            motorBackRight.setPower(0);
+            sleep(500);
 
 
             //stops motor after no input

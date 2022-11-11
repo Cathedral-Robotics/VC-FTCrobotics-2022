@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
-@TeleOp
-public class template extends LinearOpMode {
+@Autonomous
+public class Template extends LinearOpMode {
     private CRServo servoIntake;
 
 
@@ -59,8 +61,6 @@ public class template extends LinearOpMode {
 
             telemetry.addData("Left Lift Position", motorLeftLift.getCurrentPosition());
             telemetry.addData("Right Lift Position", motorRightLift.getCurrentPosition());
-
-
             telemetry.update();
 
 
