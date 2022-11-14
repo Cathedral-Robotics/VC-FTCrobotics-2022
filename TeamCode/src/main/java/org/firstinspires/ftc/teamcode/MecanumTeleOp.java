@@ -11,6 +11,9 @@ import com.qualcomm.robotcore.hardware.CRServo;
 public class MecanumTeleOp extends LinearOpMode {
     private CRServo servoIntake;
 
+boolean pGA2Y = false;
+boolean pGA2A = false;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -103,11 +106,26 @@ public class MecanumTeleOp extends LinearOpMode {
                 ArmTarget = 4100; //High level (4400 max)
             }
 
-            if (gamepad2.y) {
+//code for manual override adjustments for lift
+
+            boolean ga2y = gamepad2.y;
+            boolean ga2a = gamepad2.a;
+
+            if (ga2y && !pGA2Y && ArmTarget<=4000 && !gamepad2.dpad_right) {
+                ArmTarget = ArmTarget + 100;
+            }
+            pGA2Y = ga2y;
+
+            if (ga2a && !pGA2A && ArmTarget>=100 && !gamepad2.dpad_right) {
+                ArmTarget = ArmTarget - 100;
+            }
+            pGA2A = ga2a;
+
+            if (ga2y && !pGA2Y && gamepad2.dpad_right) {
                 ArmTarget = ArmTarget + 100;
             }
 
-            if (gamepad2.a) {
+            if (ga2a && !pGA2A && gamepad2.dpad_right) {
                 ArmTarget = ArmTarget - 100;
             }
 
