@@ -66,16 +66,16 @@ public class AnderTest extends LinearOpMode {
 
 
             motorFrontLeft.setPower(.25);
-            motorBackLeft.setPower(-.25);
+            motorBackLeft.setPower(.25);
             motorFrontRight.setPower(.25);
-            motorBackRight.setPower(-.25);
-            sleep(4500);
+            motorBackRight.setPower(.25);
+            sleep(3000);
 
             motorFrontLeft.setPower(0);
             motorBackLeft.setPower(0);
             motorFrontRight.setPower(0);
             motorBackRight.setPower(0);
-            sleep(500);
+            sleep(5000000);
 
 
             //stops motor after no input
