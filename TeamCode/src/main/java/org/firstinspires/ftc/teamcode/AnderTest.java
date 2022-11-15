@@ -1,3 +1,5 @@
+//Goes Straight (Park)
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -75,7 +77,19 @@ public class AnderTest extends LinearOpMode {
             motorBackLeft.setPower(0);
             motorFrontRight.setPower(0);
             motorBackRight.setPower(0);
-            sleep(5000000);
+            sleep(500);
+
+            motorFrontLeft.setPower(-.25);
+            motorBackLeft.setPower(-.25);
+            motorFrontRight.setPower(.25);
+            motorBackRight.setPower(.25);
+            sleep(100);
+
+            motorFrontLeft.setPower(0);
+            motorBackLeft.setPower(0);
+            motorFrontRight.setPower(0);
+            motorBackRight.setPower(0);
+            sleep(500000);
 
 
             //stops motor after no input
