@@ -133,8 +133,8 @@ boolean pGA2A = false;
             //stuff for arm position control
             motorLeftLift.setTargetPosition(-1*ArmTarget);
             motorRightLift.setTargetPosition(ArmTarget);
-            motorLeftLift.setPower(.75);
-            motorRightLift.setPower(.75);
+            motorLeftLift.setPower(1);
+            motorRightLift.setPower(1);
 
             telemetry.addData("Left Lift Position", motorLeftLift.getCurrentPosition());
             telemetry.addData("Right Lift Position", motorRightLift.getCurrentPosition());
