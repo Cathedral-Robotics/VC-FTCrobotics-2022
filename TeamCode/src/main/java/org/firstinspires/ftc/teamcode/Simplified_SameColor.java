@@ -88,7 +88,8 @@ public class Simplified_SameColor extends LinearOpMode {
                 .build();
 
         Trajectory traj6 = drive.trajectoryBuilder(traj5.end())
-                .addTemporalMarker(.2,() ->{
+                .back(.1)
+                .addTemporalMarker(.002,() ->{
                  servoIntake.setPower(-1);
 
                 motorLeftLift.setTargetPosition(-850);
@@ -98,12 +99,13 @@ public class Simplified_SameColor extends LinearOpMode {
                  })
                 .build();
 
-    //    TrajectorySequence ts6 = drive.trajectorySequenceBuilder(traj6.end())
-      //          .waitSeconds(3)
-        //        .build();
+        TrajectorySequence ts6 = drive.trajectorySequenceBuilder(traj6.end())
+               .waitSeconds(1.5)
+                .build();
 
-       /* Trajectory traj7 = drive.trajectoryBuilder(ts6.end())
-                .addTemporalMarker(.1,() ->{
+        Trajectory traj7 = drive.trajectoryBuilder(ts6.end())
+                .forward(.1)
+                .addTemporalMarker(.001,() ->{
                     servoIntake.setPower(0);
 
                     motorLeftLift.setTargetPosition(-950);
@@ -112,7 +114,70 @@ public class Simplified_SameColor extends LinearOpMode {
                     motorRightLift.setPower(.75);
                 })
                 .build();
-*/
+
+        TrajectorySequence ts7 = drive.trajectorySequenceBuilder(traj7.end())
+               .waitSeconds(1.5)
+                .build();
+
+        Trajectory traj8 = drive.trajectoryBuilder(ts7.end())
+                .forward(36)
+                .build();
+
+        TrajectorySequence ts8 = drive.trajectorySequenceBuilder(traj8.end())
+                .turn(Math.toRadians(-94))
+                .build();
+
+        Trajectory traj9 = drive.trajectoryBuilder(ts8.end())
+                .back(.5)
+                .addDisplacementMarker(() ->{
+                    servoIntake.setPower(0);
+
+                    motorLeftLift.setTargetPosition(-4100);
+                    motorRightLift.setTargetPosition(4100);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                })
+                .build();
+
+        TrajectorySequence ts9 = drive.trajectorySequenceBuilder(traj9.end())
+                .waitSeconds(2.75)
+                .build();
+
+        Trajectory traj10 = drive.trajectoryBuilder(ts9.end())
+                .back(1)
+                .addDisplacementMarker(() ->{
+                    servoIntake.setPower(1);
+                })
+                .build();
+
+        TrajectorySequence ts10 = drive.trajectorySequenceBuilder(traj10.end())
+                .waitSeconds(1.5)
+                .build();
+
+        Trajectory traj11 = drive.trajectoryBuilder(ts10.end())
+                .forward(1.5)
+                .addDisplacementMarker(() ->{
+                    servoIntake.setPower(0);
+
+                    motorLeftLift.setTargetPosition(0);
+                    motorRightLift.setTargetPosition(0);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                })
+                .build();
+
+        TrajectorySequence ts11 = drive.trajectorySequenceBuilder(traj11.end())
+                .waitSeconds(2.75)
+                .build();
+
+        Trajectory traj12 = drive.trajectoryBuilder(ts11.end())
+                .strafeLeft(10)
+                .build();
+
+        TrajectorySequence ts100 = drive.trajectorySequenceBuilder(traj7.end())
+                .waitSeconds(30)
+                .build();
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         // Wait for the game to start (d
@@ -123,8 +188,6 @@ public class Simplified_SameColor extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
-
-
 
             telemetry.addData("Left Lift Position", motorLeftLift.getCurrentPosition());
             telemetry.addData("Right Lift Position", motorRightLift.getCurrentPosition());
@@ -139,13 +202,23 @@ public class Simplified_SameColor extends LinearOpMode {
             drive.followTrajectorySequence(ts4);
             drive.followTrajectory(traj5);
             drive.followTrajectory(traj6);
-            //drive.followTrajectorySequence(ts6);
-           // drive.followTrajectory(traj7);
+            drive.followTrajectorySequence(ts6);
+            drive.followTrajectory(traj7);
 
 
+ //           drive.followTrajectory(traj8);
+ //           drive.followTrajectorySequence(ts8);
+ //           drive.followTrajectory(traj9);
+ //           drive.followTrajectorySequence(ts9);
+ //           drive.followTrajectory(traj10);
+ //           drive.followTrajectorySequence(ts10);
+ //           drive.followTrajectory(traj11);
+ //           drive.followTrajectorySequence(ts11);
+ //           drive.followTrajectory(traj12);
+ //
+        drive.followTrajectorySequence(ts100);
 
 
-        sleep(100000000);
 
     }
 }
