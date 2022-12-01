@@ -4,15 +4,33 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+
 
 
 @TeleOp
-public class CoolMecanum extends LinearOpMode {
+public class ColdMecanum extends LinearOpMode {
     private CRServo servoIntake;
 
 boolean pGA2Y = false;
 boolean pGA2A = false;
+
+    private PIDController controller;
+    public static double p = 0, i = 0, d = 0;
+    public static double f = 0;
+
+    public  static int ArmTarget = 0;
+
+    private DcMotorEx motorLeftLift;
+    private DcMotorEx motorRightLift;
+
 
 
     @Override
@@ -24,8 +42,13 @@ boolean pGA2A = false;
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("motorBackRight");
 
-        DcMotor motorLeftLift = hardwareMap.dcMotor.get("motorLeftLift");
-        DcMotor motorRightLift = hardwareMap.dcMotor.get("motorRightLift");
+        controller = new PIDController(p,i,d);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        motorLeftLift = hardwareMap.get(DcMotorEx.class, "motorLeftLift");
+        motorRightLift = hardwareMap.get(DcMotorEx.class,"motorRightLift");
+
+        motorLeftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         servoIntake = hardwareMap.get(CRServo.class,"servoIntake");
 
@@ -33,15 +56,6 @@ boolean pGA2A = false;
         // Reverse left motors if you are using NeveRests
         motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        motorLeftLift.setTargetPosition(0);
-        motorRightLift.setTargetPosition(0);
-        motorLeftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLeftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        int ArmTarget = 0;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -131,13 +145,17 @@ boolean pGA2A = false;
 
 
             //stuff for arm position control
-            motorLeftLift.setTargetPosition(-1*ArmTarget);
-            motorRightLift.setTargetPosition(ArmTarget);
-            motorLeftLift.setPower(1);
-            motorRightLift.setPower(1);
+            controller = new PIDController(p, i , d);
+            int SlidesPos = motorRightLift.getCurrentPosition();
 
-            telemetry.addData("Left Lift Position", motorLeftLift.getCurrentPosition());
-            telemetry.addData("Right Lift Position", motorRightLift.getCurrentPosition());
+            double pid= controller.calculate(SlidesPos, ArmTarget);
+
+            motorLeftLift.setPower(pid + f);
+            motorRightLift.setPower(pid + f);
+
+            telemetry.addData("pos",SlidesPos );
+            telemetry.addData("target", ArmTarget);
+            telemetry.update();
 
 
             telemetry.update();

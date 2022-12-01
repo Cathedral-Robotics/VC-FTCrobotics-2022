@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
 @TeleOp
@@ -17,8 +18,7 @@ public class PIDF_Slides extends OpMode{
 
     public static double p = 0, i = 0, d = 0;
     public static double f = 0;
-
-    public  static int target = 0;
+    public  static int ArmTarget = 0;
 
     private DcMotorEx motorLeftLift;
     private DcMotorEx motorRightLift;
@@ -31,22 +31,22 @@ public class PIDF_Slides extends OpMode{
 
         motorLeftLift = hardwareMap.get(DcMotorEx.class, "motorLeftLift");
         motorRightLift = hardwareMap.get(DcMotorEx.class,"motorRightLift");
+
+        motorLeftLift.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
     public void loop(){
         controller = new PIDController(p, i , d);
-                int RightSlidesPos = motorRightLift.getCurrentPosition();
-                int LeftSlidesPos = motorLeftLift.getCurrentPosition();
+                int SlidesPos = motorRightLift.getCurrentPosition();
 
-        double pidLeft= controller.calculate(LeftSlidesPos, (-1 * target));
-        double pidRight= controller.calculate(RightSlidesPos, target);
+        double pid= controller.calculate(SlidesPos, ArmTarget);
 
-motorLeftLift.setPower(pidLeft);
-motorRightLift.setPower(pidLeft);
+        motorLeftLift.setPower(pid + f);
+        motorRightLift.setPower(pid + f);
 
-        telemetry.addData("pos",RightSlidesPos );
-        telemetry.addData("target", target);
+        telemetry.addData("pos",SlidesPos );
+        telemetry.addData("target", ArmTarget);
         telemetry.update();
 
     }
