@@ -39,7 +39,7 @@ public class Simplified_SameColor extends LinearOpMode {
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .strafeRight(22)
+                .strafeLeft(22)
                 .addDisplacementMarker(() ->{
                     motorLeftLift.setTargetPosition(-325);
                     motorRightLift.setTargetPosition(325);
@@ -50,7 +50,7 @@ public class Simplified_SameColor extends LinearOpMode {
                 .build();
 
         TrajectorySequence ts2 = drive.trajectorySequenceBuilder(traj2.end())
-                .waitSeconds(1.5)
+                .waitSeconds(2.5)
                 .build();
 
 
@@ -61,20 +61,24 @@ public class Simplified_SameColor extends LinearOpMode {
                 .forward(24)
                 .build();
 
-        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-                .strafeLeft(25)
+        Trajectory traj_3 = drive.trajectoryBuilder(traj3.end())
+                .strafeRight(22)
                 .build();
 
-        Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
-                .forward(24)
+        Trajectory traj4 = drive.trajectoryBuilder(traj_3.end())
+                .forward(26.25)
                 .build();
 
-        TrajectorySequence ts5 = drive.trajectorySequenceBuilder(traj5.end())
-                .turn(Math.toRadians(94))
+
+        TrajectorySequence ts4 = drive.trajectorySequenceBuilder(traj4.end())
+                .turn(Math.toRadians(-94))
                 .build();
 
-        Trajectory traj6 = drive.trajectoryBuilder(ts5.end())
-                .back(1)
+        Pose2d turnPose_1 = new Pose2d(47.25,-20,Math.toRadians(270));
+
+
+        Trajectory traj5 = drive.trajectoryBuilder(turnPose_1)
+                .back(27)
                 .addTemporalMarker(.2,() ->{
                     motorLeftLift.setTargetPosition(-900);
                     motorRightLift.setTargetPosition(900);
@@ -83,8 +87,32 @@ public class Simplified_SameColor extends LinearOpMode {
                 })
                 .build();
 
+        Trajectory traj6 = drive.trajectoryBuilder(traj5.end())
+                .addTemporalMarker(.2,() ->{
+                 servoIntake.setPower(-1);
 
+                motorLeftLift.setTargetPosition(-850);
+                motorRightLift.setTargetPosition(850);
+                motorLeftLift.setPower(.75);
+                motorRightLift.setPower(.75);
+                 })
+                .build();
 
+    //    TrajectorySequence ts6 = drive.trajectorySequenceBuilder(traj6.end())
+      //          .waitSeconds(3)
+        //        .build();
+
+       /* Trajectory traj7 = drive.trajectoryBuilder(ts6.end())
+                .addTemporalMarker(.1,() ->{
+                    servoIntake.setPower(0);
+
+                    motorLeftLift.setTargetPosition(-950);
+                    motorRightLift.setTargetPosition(950);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                })
+                .build();
+*/
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         // Wait for the game to start (d
@@ -106,10 +134,14 @@ public class Simplified_SameColor extends LinearOpMode {
             drive.followTrajectory(traj2);
             drive.followTrajectorySequence(ts2);
             drive.followTrajectory(traj3);
+            drive.followTrajectory(traj_3);
             drive.followTrajectory(traj4);
+            drive.followTrajectorySequence(ts4);
             drive.followTrajectory(traj5);
-            drive.followTrajectorySequence(ts5);
             drive.followTrajectory(traj6);
+            //drive.followTrajectorySequence(ts6);
+           // drive.followTrajectory(traj7);
+
 
 
 
