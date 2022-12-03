@@ -23,8 +23,8 @@ boolean pGA2Y = false;
 boolean pGA2A = false;
 
     private PIDController controller;
-    public static double p = 0, i = 0, d = 0;
-    public static double f = 0;
+    public static double p = 0.003, i = 0.85, d = 0.014;
+    public static double f = 0.078;
 
     public  static int ArmTarget = 0;
 
@@ -93,11 +93,11 @@ boolean pGA2A = false;
                 servoIntake.setPower(-1);
             }
 
-            if (ArmTarget == 135) {
+            if (ArmTarget == 70) {
                 servoIntake.setPower(-1);
             }
 
-            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5 && ArmTarget != 135){
+            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5 && ArmTarget != 70){
                 servoIntake.setPower(0);
             }
 
@@ -108,16 +108,16 @@ boolean pGA2A = false;
 
 
             if (gamepad2.left_bumper) {
-                ArmTarget = 135; //intaking
+                ArmTarget = 70; //intaking
             }
             else if (gamepad2.dpad_down) {
-                ArmTarget = 1700; //Low level
+                ArmTarget = 1750; //Low level
             }
             else if (gamepad2.dpad_up) {
-                ArmTarget = 2900; //Mid level
+                ArmTarget = 2950; //Mid level
             }
             else if (gamepad2.right_bumper) {
-                ArmTarget = 4100; //High level (4400 max)
+                ArmTarget = 4130; //High level (4400 max)
             }
 
 //code for manual override adjustments for lift
@@ -125,22 +125,22 @@ boolean pGA2A = false;
             boolean ga2y = gamepad2.y;
             boolean ga2a = gamepad2.a;
 
-            if (ga2y && !pGA2Y && ArmTarget<=4000 && !gamepad2.dpad_right) {
-                ArmTarget = ArmTarget + 100;
+            if (ga2y && !pGA2Y && ArmTarget<=4050 && !gamepad2.dpad_right) {
+                ArmTarget = ArmTarget + 50; //used to be 100
             }
             pGA2Y = ga2y;
 
-            if (ga2a && !pGA2A && ArmTarget>=100 && !gamepad2.dpad_right) {
-                ArmTarget = ArmTarget - 100;
+            if (ga2a && !pGA2A && ArmTarget>=50 && !gamepad2.dpad_right) {
+                ArmTarget = ArmTarget - 50; //used to be 100
             }
             pGA2A = ga2a;
 
             if (ga2y && !pGA2Y && gamepad2.dpad_right) {
-                ArmTarget = ArmTarget + 100;
+                ArmTarget = ArmTarget + 50;
             }
 
             if (ga2a && !pGA2A && gamepad2.dpad_right) {
-                ArmTarget = ArmTarget - 100;
+                ArmTarget = ArmTarget - 50;
             }
 
 
