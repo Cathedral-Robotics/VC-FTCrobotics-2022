@@ -93,7 +93,7 @@ boolean pGA2A = false;
                 servoIntake.setPower(-1);
             }
 
-            if (ArmTarget == 70) {
+            if (ArmTarget <= 70) {
                 servoIntake.setPower(-1);
             }
 
