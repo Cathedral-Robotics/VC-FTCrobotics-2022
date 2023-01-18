@@ -75,7 +75,7 @@ public class Parking_1PLUS1 extends LinearOpMode
                 .build();
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .back(50)
+                .back(49.50)
                 .addDisplacementMarker(36, () ->{
                     servoIntake.setPower(0);
 
@@ -176,7 +176,7 @@ public class Parking_1PLUS1 extends LinearOpMode
                 .build();
 
         Trajectory traj12 = drive.trajectoryBuilder(traj11.end())
-                .forward(3.5)
+                .forward(5)
                 .addDisplacementMarker(() ->{
                     motorLeftLift.setTargetPosition(0);
                     motorRightLift.setTargetPosition(0);
@@ -187,6 +187,18 @@ public class Parking_1PLUS1 extends LinearOpMode
                 .build();
 
 
+
+        Trajectory trajMid = drive.trajectoryBuilder(traj12.end())
+                .strafeRight(13)
+                .build();
+
+        Trajectory trajleft = drive.trajectoryBuilder(trajMid.end())
+                .strafeRight(24)
+                .build();
+
+        Trajectory trajRight = drive.trajectoryBuilder(traj12.end())
+                .strafeLeft(13)
+                .build();
 
         TrajectorySequence ts100 = drive.trajectorySequenceBuilder(traj4.end())
                 .waitSeconds(30)
@@ -301,34 +313,76 @@ public class Parking_1PLUS1 extends LinearOpMode
         /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
         while (opModeIsActive()) {
 
-            drive.followTrajectory(traj1);
-            drive.followTrajectory(traj2);
-            drive.followTrajectory(traj3);
-            drive.followTrajectory(traj4);
-            drive.followTrajectory(traj5);
-            drive.followTrajectorySequence(ts5);
-            drive.followTrajectory(traj6);
-            drive.followTrajectory(traj7);
-            drive.followTrajectorySequence(ts7);
-            drive.followTrajectory(traj8);
-            drive.followTrajectorySequence(ts8);
-            drive.followTrajectory(traj9);
-            drive.followTrajectorySequence(ts9);
-            drive.followTrajectory(traj10);
-            drive.followTrajectory(traj11);
-            drive.followTrajectorySequence(ts11);
-            drive.followTrajectory(traj12);
+
+
 
             if(tagOfInterest == null || tagOfInterest.id == LEFT){
 
+                drive.followTrajectory(traj1);
+                drive.followTrajectory(traj2);
+                drive.followTrajectory(traj3);
+                drive.followTrajectory(traj4);
+                drive.followTrajectory(traj5);
+                drive.followTrajectorySequence(ts5);
+                drive.followTrajectory(traj6);
+                drive.followTrajectory(traj7);
+                drive.followTrajectorySequence(ts7);
+                drive.followTrajectory(traj8);
+                drive.followTrajectorySequence(ts8);
+                drive.followTrajectory(traj9);
+                drive.followTrajectorySequence(ts9);
+                drive.followTrajectory(traj10);
+                drive.followTrajectory(traj11);
+                drive.followTrajectorySequence(ts11);
+                drive.followTrajectory(traj12);
+                drive.followTrajectory(trajMid);
+                drive.followTrajectory(trajleft);
+                drive.followTrajectorySequence(ts100);
                //
 
             }else if(tagOfInterest.id == MIDDLE){
-
+                drive.followTrajectory(traj1);
+                drive.followTrajectory(traj2);
+                drive.followTrajectory(traj3);
+                drive.followTrajectory(traj4);
+                drive.followTrajectory(traj5);
+                drive.followTrajectorySequence(ts5);
+                drive.followTrajectory(traj6);
+                drive.followTrajectory(traj7);
+                drive.followTrajectorySequence(ts7);
+                drive.followTrajectory(traj8);
+                drive.followTrajectorySequence(ts8);
+                drive.followTrajectory(traj9);
+                drive.followTrajectorySequence(ts9);
+                drive.followTrajectory(traj10);
+                drive.followTrajectory(traj11);
+                drive.followTrajectorySequence(ts11);
+                drive.followTrajectory(traj12);
+                drive.followTrajectory(trajMid);
+                drive.followTrajectorySequence(ts100);
                //
 
             }else{
 
+                drive.followTrajectory(traj1);
+                drive.followTrajectory(traj2);
+                drive.followTrajectory(traj3);
+                drive.followTrajectory(traj4);
+                drive.followTrajectory(traj5);
+                drive.followTrajectorySequence(ts5);
+                drive.followTrajectory(traj6);
+                drive.followTrajectory(traj7);
+                drive.followTrajectorySequence(ts7);
+                drive.followTrajectory(traj8);
+                drive.followTrajectorySequence(ts8);
+                drive.followTrajectory(traj9);
+                drive.followTrajectorySequence(ts9);
+                drive.followTrajectory(traj10);
+                drive.followTrajectory(traj11);
+                drive.followTrajectorySequence(ts11);
+                drive.followTrajectory(traj12);
+                drive.followTrajectory(trajRight);
+                drive.followTrajectorySequence(ts100);
                //
             }
 

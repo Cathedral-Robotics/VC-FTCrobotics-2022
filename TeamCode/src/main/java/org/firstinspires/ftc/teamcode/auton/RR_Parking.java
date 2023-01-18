@@ -57,15 +57,15 @@ public class RR_Parking extends LinearOpMode
         Pose2d startPose = new Pose2d(0,0,Math.toRadians(0));
 
         Trajectory traj1 = drive.trajectoryBuilder((startPose))
-                .forward(27)
+                .back(27)
                 .build();
 
         Trajectory trajLeft = drive.trajectoryBuilder(traj1.end())
-                .strafeLeft(24)
+                .strafeRight(24)
                 .build();
 
         Trajectory trajRight = drive.trajectoryBuilder(traj1.end())
-                .strafeRight(24)
+                .strafeLeft(24)
                 .build();
 
 
