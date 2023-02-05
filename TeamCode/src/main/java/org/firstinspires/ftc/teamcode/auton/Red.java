@@ -17,6 +17,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 import java.util.ArrayList;
 
 @Autonomous
+@Disabled
 
 
 public class Red extends LinearOpMode

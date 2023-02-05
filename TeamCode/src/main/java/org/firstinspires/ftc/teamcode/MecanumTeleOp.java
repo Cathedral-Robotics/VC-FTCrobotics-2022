@@ -94,10 +94,10 @@ boolean pGA2A = false;
 
 
             if (gamepad2.left_bumper) {
-                ArmTarget = 135; //intaking
+                ArmTarget = 81; //intaking
             }
             else if (gamepad2.dpad_down) {
-                ArmTarget = 1700; //Low level
+                ArmTarget = 1040; //Low level
             }
             else if (gamepad2.dpad_up) {
                 ArmTarget = 2900; //Mid level

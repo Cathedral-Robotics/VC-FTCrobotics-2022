@@ -1,32 +1,42 @@
 package org.firstinspires.ftc.teamcode.auton;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
-
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;
 
 @Autonomous
-@Disabled
 
-public class RR_Parking extends LinearOpMode
+public class Lift_Test_Auton extends LinearOpMode
 {OpenCvCamera camera;
+    private CRServo servoIntake;
+
+
+    private PIDController controller;
+    public static double p = 0.0086, i = 0.9, d = 0.00023;
+    public static double f = 0.073;
+
+    public int ArmTarget = 0;
+
+    private DcMotorEx motorLeftLift;
+    private DcMotorEx motorRightLift;
+
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     static final double FEET_PER_METER = 3.28084;
@@ -55,19 +65,55 @@ public class RR_Parking extends LinearOpMode
     {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Pose2d startPose = new Pose2d(0,0,Math.toRadians(0));
+        motorLeftLift = hardwareMap.get(DcMotorEx.class, "motorLeftLift");
+        motorRightLift = hardwareMap.get(DcMotorEx.class,"motorRightLift");
+        motorLeftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        Trajectory traj1 = drive.trajectoryBuilder((startPose))
-                .back(27)
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        servoIntake = hardwareMap.get(CRServo.class, "servoIntake");
+
+
+        TrajectorySequence Preload = drive.trajectorySequenceBuilder(new Pose2d(-36.00, -65.00, Math.toRadians(90.00)))
+                .splineTo(new Vector2d(-36, 25), Math.toRadians(90))
+                .addDisplacementMarker(5, () ->{
+                    ArmTarget = 200;
+
+                })
+                .build();
+        drive.setPoseEstimate(Preload.start());
+
+        controller = new PIDController(p, i , d);
+        int SlidesPos = motorRightLift.getCurrentPosition();
+
+        double pid= controller.calculate(SlidesPos, ArmTarget);
+
+        motorLeftLift.setPower(pid + f);
+        motorRightLift.setPower(pid + f);
+
+        telemetry.addData("pos",SlidesPos );
+        telemetry.addData("target", ArmTarget);
+        telemetry.update();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        TrajectorySequence ts100 = drive.trajectorySequenceBuilder(Preload.end())
+                .waitSeconds(30)
                 .build();
 
-        Trajectory trajLeft = drive.trajectoryBuilder(traj1.end())
-                .strafeRight(24)
-                .build();
 
-        Trajectory trajRight = drive.trajectoryBuilder(traj1.end())
-                .strafeLeft(24)
-                .build();
 
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -178,25 +224,35 @@ public class RR_Parking extends LinearOpMode
         /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
         while (opModeIsActive()) {
 
-            sleep(20);
+
 
             if(tagOfInterest == null || tagOfInterest.id == LEFT){
 
-                drive.followTrajectory(traj1);
-                drive.followTrajectory(trajLeft);
-                sleep(200000000);
+
+                drive.followTrajectorySequence(Preload);
+
+                /*drive.followTrajectorySequence(Cone_Pickup);
+                drive.followTrajectorySequence(Cone_Placement);
+                drive.followTrajectorySequence(Cone_Pickup_2);
+                drive.followTrajectorySequence(Cone_Placement);
+                drive.followTrajectorySequence(Cone_Pickup_2);
+                drive.followTrajectorySequence(Cone_Placement);
+*/
+                drive.followTrajectorySequence(ts100);
+
+
+
+                //
 
             }else if(tagOfInterest.id == MIDDLE){
 
-                drive.followTrajectory(traj1);
-                sleep(50000000);
+                //
 
             }else{
 
-                drive.followTrajectory(traj1);
-                drive.followTrajectory(trajRight);
-                sleep(5000000);
+                //
             }
+
 
         }
     }

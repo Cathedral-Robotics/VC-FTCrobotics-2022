@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.auton;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 @Autonomous
 
 
-public class Parking_1PLUS1 extends LinearOpMode
+public class Cone_1 extends LinearOpMode
 {OpenCvCamera camera;
     private CRServo servoIntake;
 
@@ -68,44 +68,54 @@ public class Parking_1PLUS1 extends LinearOpMode
 
         Pose2d startPose = new Pose2d(0,0,Math.toRadians(0));
 
-        Trajectory traj1 = drive.trajectoryBuilder((startPose))
-                .forward(15)
+        Trajectory traj00 = drive.trajectoryBuilder((startPose))
+                .forward(0.001)
+                .addDisplacementMarker(() ->{
+                    motorLeftLift.setTargetPosition(-300);
+                    motorRightLift.setTargetPosition(300);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+
+
+                })
                 .build();
 
-        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .strafeRight(.1)
+        Trajectory traj1 = drive.trajectoryBuilder(traj00.end())
+                .forward(55)
                 .build();
 
-        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .back(10.50)
-                .addDisplacementMarker(.5, () ->{
-                    servoIntake.setPower(0);
+        Trajectory traj1_1 = drive.trajectoryBuilder(traj1.end())
+                .back(5)
+                .build();
 
-                    motorLeftLift.setTargetPosition(-410);
-                    motorRightLift.setTargetPosition(410);
+        Trajectory traj2 = drive.trajectoryBuilder(traj1_1.end())
+                .strafeRight(13.5)
+                .addDisplacementMarker(2.5, () ->{
+                    servoIntake.setPower(-1);
+
+                    motorLeftLift.setTargetPosition(-2500);
+                    motorRightLift.setTargetPosition(2500);
                     motorLeftLift.setPower(.75);
                     motorRightLift.setPower(.75);
                 })
                 .build();
 
-        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-                .strafeLeft(16)
-                .build();
 
-        Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
-                .back(4.25)
-                .addDisplacementMarker(() ->{
+
+        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
+                .forward(5.50)
+                .addDisplacementMarker( () ->{
                     servoIntake.setPower(1);
                 })
                 .build();
 
-        TrajectorySequence ts5 = drive.trajectorySequenceBuilder(traj5.end())
-                .waitSeconds(1)
+        TrajectorySequence ts3 = drive.trajectorySequenceBuilder(traj3.end())
+                .waitSeconds(1.5)
                 .build();
 
 
-        Trajectory traj6 = drive.trajectoryBuilder(ts5.end())
-                .forward(3.75)
+        Trajectory traj6 = drive.trajectoryBuilder(ts3.end())
+                .back(6)
                 .addDisplacementMarker(() ->{
                     servoIntake.setPower(0);
                     motorLeftLift.setTargetPosition(-1050);
@@ -115,7 +125,7 @@ public class Parking_1PLUS1 extends LinearOpMode
 
 
         Trajectory traj7 = drive.trajectoryBuilder(traj6.end())
-                .strafeRight(16)
+                .strafeLeft(13.5)
                 .build();
 
         TrajectorySequence ts7 = drive.trajectorySequenceBuilder(traj7.end())
@@ -124,85 +134,45 @@ public class Parking_1PLUS1 extends LinearOpMode
 
         Pose2d turnPose_1 = new Pose2d(-71.35,-2.075 ,Math.toRadians(90));
 
-        Trajectory traj8 = drive.trajectoryBuilder((turnPose_1))
-                .back(26)
+        Trajectory traj8 = drive.trajectoryBuilder(ts7.end())
+                .strafeRight(2)
+                .build();
+
+        Trajectory One = drive.trajectoryBuilder(ts7.end())
+                .forward(21.25)
+                .build();
+
+        TrajectorySequence OneOne = drive.trajectorySequenceBuilder(One.end())
+                .turn(Math.toRadians(94))
+          .addDisplacementMarker(() ->{
+          servoIntake.setPower(0);
+          motorLeftLift.setTargetPosition(0);
+           motorRightLift.setTargetPosition(0);
+     })
+            .build();
+
+
+        Trajectory Two = drive.trajectoryBuilder(ts7.end())
+                .forward(1)
                 .addDisplacementMarker(() ->{
-                    servoIntake.setPower(-1);
-                    motorLeftLift.setTargetPosition(-700);
-                    motorRightLift.setTargetPosition(700);
-                })
-                .build();
-
-        TrajectorySequence ts8 = drive.trajectorySequenceBuilder(traj8.end())
-                .waitSeconds(1)
-                .build();
-
-
-        Trajectory traj9 = drive.trajectoryBuilder(ts8.end())
-                .forward(26)
-                .addTemporalMarker(0.01, () ->{
                     servoIntake.setPower(0);
-                    motorLeftLift.setTargetPosition(-1200);
-                    motorRightLift.setTargetPosition(1200);
-                })
-                .build();
-
-        TrajectorySequence ts9 = drive.trajectorySequenceBuilder(traj9.end())
-                .turn(Math.toRadians(-94))
-                .build();
-
-        Pose2d turnPose_2 = new Pose2d(-51,-6 ,Math.toRadians(0));
-
-
-        Trajectory traj10 = drive.trajectoryBuilder((turnPose_2))
-                .strafeLeft(15.5)
-                .addDisplacementMarker(.01, () ->{
-                    servoIntake.setPower(0);
-
-                    motorLeftLift.setTargetPosition(-400);
-                    motorRightLift.setTargetPosition(400);
-                    motorLeftLift.setPower(.75);
-                    motorRightLift.setPower(.75);
-                })
-                .build();
-
-        Trajectory traj11 = drive.trajectoryBuilder(traj10.end())
-                .back(3.25)
-                .addDisplacementMarker(() ->{
-                    servoIntake.setPower(1);
-                })
-                .build();
-
-        TrajectorySequence ts11 = drive.trajectorySequenceBuilder(traj11.end())
-                .waitSeconds(1.5)
-                .build();
-
-        Trajectory traj12 = drive.trajectoryBuilder(traj11.end())
-                .forward(5)
-                .addDisplacementMarker(() ->{
                     motorLeftLift.setTargetPosition(0);
                     motorRightLift.setTargetPosition(0);
-                    motorLeftLift.setPower(.75);
-                    motorRightLift.setPower(.75);
+                })
+                .build();
+
+        Trajectory Three = drive.trajectoryBuilder(ts7.end())
+                .back(24)
+                .addDisplacementMarker(() ->{
                     servoIntake.setPower(0);
+                    motorLeftLift.setTargetPosition(0);
+                    motorRightLift.setTargetPosition(0);
                 })
                 .build();
 
 
 
-        Trajectory trajMid = drive.trajectoryBuilder(traj12.end())
-                .strafeRight(13)
-                .build();
-
-        Trajectory trajleft = drive.trajectoryBuilder(trajMid.end())
-                .strafeRight(24)
-                .build();
-
-        Trajectory trajRight = drive.trajectoryBuilder(traj12.end())
-                .strafeLeft(13)
-                .build();
-
-        TrajectorySequence ts100 = drive.trajectorySequenceBuilder(traj4.end())
+        TrajectorySequence ts100 = drive.trajectorySequenceBuilder(traj3.end())
                 .waitSeconds(30)
                 .build();
 
@@ -320,71 +290,71 @@ public class Parking_1PLUS1 extends LinearOpMode
 
             if(tagOfInterest == null || tagOfInterest.id == LEFT){
 
+                drive.followTrajectory(traj00);
+                drive.followTrajectorySequence(ts3);
                 drive.followTrajectory(traj1);
+                drive.followTrajectorySequence(ts3);
+                drive.followTrajectory(traj1_1);
                 drive.followTrajectory(traj2);
                 drive.followTrajectory(traj3);
-                drive.followTrajectory(traj4);
-                drive.followTrajectory(traj5);
-                drive.followTrajectorySequence(ts5);
+                drive.followTrajectorySequence(ts3);
                 drive.followTrajectory(traj6);
+                drive.followTrajectorySequence(ts3);
                 drive.followTrajectory(traj7);
                 drive.followTrajectorySequence(ts7);
                 drive.followTrajectory(traj8);
-                drive.followTrajectorySequence(ts8);
-                drive.followTrajectory(traj9);
-                drive.followTrajectorySequence(ts9);
-                drive.followTrajectory(traj10);
-                drive.followTrajectory(traj11);
-                drive.followTrajectorySequence(ts11);
-                drive.followTrajectory(traj12);
-                drive.followTrajectory(trajMid);
-                drive.followTrajectory(trajleft);
+                drive.followTrajectory(One);
+                drive.followTrajectorySequence(OneOne);
+
+
+
+
+
+
                 drive.followTrajectorySequence(ts100);
                //
 
             }else if(tagOfInterest.id == MIDDLE){
+
+                drive.followTrajectory(traj00);
+                drive.followTrajectorySequence(ts3);
                 drive.followTrajectory(traj1);
+                drive.followTrajectorySequence(ts3);
+                drive.followTrajectory(traj1_1);
                 drive.followTrajectory(traj2);
                 drive.followTrajectory(traj3);
-                drive.followTrajectory(traj4);
-                drive.followTrajectory(traj5);
-                drive.followTrajectorySequence(ts5);
+                drive.followTrajectorySequence(ts3);
                 drive.followTrajectory(traj6);
+                drive.followTrajectorySequence(ts3);
                 drive.followTrajectory(traj7);
                 drive.followTrajectorySequence(ts7);
                 drive.followTrajectory(traj8);
-                drive.followTrajectorySequence(ts8);
-                drive.followTrajectory(traj9);
-                drive.followTrajectorySequence(ts9);
-                drive.followTrajectory(traj10);
-                drive.followTrajectory(traj11);
-                drive.followTrajectorySequence(ts11);
-                drive.followTrajectory(traj12);
-                drive.followTrajectory(trajMid);
+
+                drive.followTrajectory(Two);
+
                 drive.followTrajectorySequence(ts100);
-               //
+
 
             }else{
 
+                drive.followTrajectory(traj00);
+                drive.followTrajectorySequence(ts3);
                 drive.followTrajectory(traj1);
+                drive.followTrajectorySequence(ts3);
+                drive.followTrajectory(traj1_1);
                 drive.followTrajectory(traj2);
                 drive.followTrajectory(traj3);
-                drive.followTrajectory(traj4);
-                drive.followTrajectory(traj5);
-                drive.followTrajectorySequence(ts5);
+                drive.followTrajectorySequence(ts3);
                 drive.followTrajectory(traj6);
+                drive.followTrajectorySequence(ts3);
                 drive.followTrajectory(traj7);
                 drive.followTrajectorySequence(ts7);
                 drive.followTrajectory(traj8);
-                drive.followTrajectorySequence(ts8);
-                drive.followTrajectory(traj9);
-                drive.followTrajectorySequence(ts9);
-                drive.followTrajectory(traj10);
-                drive.followTrajectory(traj11);
-                drive.followTrajectorySequence(ts11);
-                drive.followTrajectory(traj12);
-                drive.followTrajectory(trajRight);
+
+                drive.followTrajectory(Three);
+
                 drive.followTrajectorySequence(ts100);
+
                //
             }
 

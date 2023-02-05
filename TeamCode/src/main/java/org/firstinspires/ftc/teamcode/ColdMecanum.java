@@ -23,15 +23,10 @@ boolean pGA2Y = false;
 boolean pGA2A = false;
 
     private PIDController controller;
-    public static double p = 0.003, i = 0.85, d = 0.014;
-    public static double f = 0.078;
+    public static double p = 0.0086, i = 0.9, d = 0.00023;
+    public static double f = 0.073;
 
-    public  static int ArmTarget = 0;
-
-    private DcMotorEx motorLeftLift;
-    private DcMotorEx motorRightLift;
-
-
+    public int ArmTarget = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -45,12 +40,17 @@ boolean pGA2A = false;
         controller = new PIDController(p,i,d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        motorLeftLift = hardwareMap.get(DcMotorEx.class, "motorLeftLift");
-        motorRightLift = hardwareMap.get(DcMotorEx.class,"motorRightLift");
+       DcMotor motorLeftLift = hardwareMap.get(DcMotorEx.class, "motorLeftLift");
+       DcMotor motorRightLift = hardwareMap.get(DcMotorEx.class,"motorRightLift");
 
         motorLeftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         servoIntake = hardwareMap.get(CRServo.class,"servoIntake");
+
+        motorLeftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLeftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorRightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
@@ -93,11 +93,15 @@ boolean pGA2A = false;
                 servoIntake.setPower(-1);
             }
 
-            if (ArmTarget <= 70) {
+            if (ArmTarget <= 100) {
                 servoIntake.setPower(-1);
             }
 
-            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5 && ArmTarget != 70){
+            if (ArmTarget == 490){
+                servoIntake.setPower(-1);
+            }
+
+            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5 && ArmTarget >100 && ArmTarget != 490){
                 servoIntake.setPower(0);
             }
 
@@ -110,14 +114,17 @@ boolean pGA2A = false;
             if (gamepad2.left_bumper) {
                 ArmTarget = 70; //intaking
             }
+            else if (gamepad2.back) {
+                ArmTarget = 490; //Cone Stack
+            }
             else if (gamepad2.dpad_down) {
-                ArmTarget = 1750; //Low level
+                ArmTarget = 1040; //Low level
             }
             else if (gamepad2.dpad_up) {
-                ArmTarget = 2950; //Mid level
+                ArmTarget = 1780; //Mid level
             }
             else if (gamepad2.right_bumper) {
-                ArmTarget = 4130; //High level (4400 max)
+                ArmTarget = 2550; //High level (4400 max)
             }
 
 //code for manual override adjustments for lift
@@ -125,7 +132,7 @@ boolean pGA2A = false;
             boolean ga2y = gamepad2.y;
             boolean ga2a = gamepad2.a;
 
-            if (ga2y && !pGA2Y && ArmTarget<=4050 && !gamepad2.dpad_right) {
+            if (ga2y && !pGA2Y && ArmTarget<=2550 && !gamepad2.dpad_right) {
                 ArmTarget = ArmTarget + 50; //used to be 100
             }
             pGA2Y = ga2y;

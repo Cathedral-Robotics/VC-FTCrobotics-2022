@@ -18,6 +18,7 @@ package org.firstinspires.ftc.teamcode.auton;
 
 
 @Autonomous
+@Disabled
 
 
 public class AUTONN extends LinearOpMode {
