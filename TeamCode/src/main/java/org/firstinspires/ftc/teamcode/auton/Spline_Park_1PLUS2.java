@@ -257,6 +257,13 @@ public class Spline_Park_1PLUS2 extends LinearOpMode
 
    /*
 
+TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(-62.75, -13.50, Math.toRadians(180.00)))
+        .lineTo(new Vector2d(-39.50, -13.50))
+        .setReversed(true)
+        .splineToLinearHeading(new Pose2d(-28.00, -7.50, Math.toRadians(45.00)), Math.toRadians(45.00))
+        .build();
+
+
         TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(-62.75, -13.50, Math.toRadians(180.00)))
                 .lineTo(new Vector2d(-50.00, -13.50))
                 .splineToLinearHeading(new Pose2d(-28.00, -7.50, Math.toRadians(45.00)), Math.toRadians(45.00))
@@ -267,6 +274,20 @@ public class Spline_Park_1PLUS2 extends LinearOpMode
                     motorRightLift.setPower(.75);
                 })
                 .build();
+
+         TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(-62.75, -13.50, Math.toRadians(180.00)))
+                .lineTo(new Vector2d(-47.30, -14.77))
+                .lineToLinearHeading(new Pose2d(-34.85, -14.98, Math.toRadians(60.00)))
+                .splineTo(new Vector2d(-28.00, -7.50), Math.toRadians(45.00))
+                .addDisplacementMarker(21.25, () ->{
+                    motorLeftLift.setTargetPosition(-2550);
+                    motorRightLift.setTargetPosition(2550);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                })
+                .build();
+
+
 
 
 
@@ -467,12 +488,14 @@ public class Spline_Park_1PLUS2 extends LinearOpMode
                 drive.followTrajectorySequence(tspickup_1);
                 drive.followTrajectorySequence(Placement);
                 drive.followTrajectorySequence(tsdrop);
+
+                /*
                 drive.followTrajectorySequence(Cone_Pickup);
                 drive.followTrajectorySequence(tspickup_2);
                 drive.followTrajectorySequence(Placement);
                 drive.followTrajectorySequence(tsdrop);
 
-               /* drive.followTrajectorySequence(Cone_Placement);
+                drive.followTrajectorySequence(Cone_Placement);
                 drive.followTrajectorySequence(Cone_Pickup_2);
                 drive.followTrajectorySequence(Cone_Placement);
                 drive.followTrajectorySequence(Cone_Pickup_2);
