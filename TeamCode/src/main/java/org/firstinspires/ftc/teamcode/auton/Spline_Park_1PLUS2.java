@@ -151,7 +151,10 @@ public class Spline_Park_1PLUS2 extends LinearOpMode
 
         TrajectorySequence Preload = drive.trajectorySequenceBuilder(new Pose2d(-36.00, -65.00, Math.toRadians(90.00)))
                 .UNSTABLE_addTemporalMarkerOffset(0.00,() -> {})
-                .splineToLinearHeading(new Pose2d(-36.00, -24.00, Math.toRadians(90.00)), Math.toRadians(90.00))
+                .splineToLinearHeading(new Pose2d(-36.00, -7.00, Math.toRadians(90.00)), Math.toRadians(90.00))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(-36.00, -10.00, Math.toRadians(90.00)), Math.toRadians(90.00))
+
                 .splineToLinearHeading(new Pose2d(-28.00, -8.00, Math.toRadians(45.00)), Math.toRadians(45.00))
 
                 .addDisplacementMarker(30, () ->{
@@ -172,24 +175,11 @@ public class Spline_Park_1PLUS2 extends LinearOpMode
                 .waitSeconds(1)
                 .build();
 
-      /*  TrajectorySequence Cone_Pickup = drive.trajectorySequenceBuilder(new Pose2d(-34.17, -8.00, Math.toRadians(45.00)))
-                .lineToConstantHeading(new Vector2d(-41.5, -21.))
-                .splineToLinearHeading(new Pose2d(-62.00, -10.50, Math.toRadians(180.00)), Math.toRadians(180.00))
-
-                .addDisplacementMarker(4, () ->{
-                    motorLeftLift.setTargetPosition(-600);
-                    motorRightLift.setTargetPosition(600);
-                    motorLeftLift.setPower(.75);
-                    motorRightLift.setPower(.75);
-                    servoIntake.setPower(0);
-                })
-                .build();
-       */
-
         TrajectorySequence Cone_Pickup = drive.trajectorySequenceBuilder(new Pose2d(-28.00, -8.00, Math.toRadians(45.00)))
-                .lineToLinearHeading(new Pose2d(-36.00, -24.00, Math.toRadians(135.00)))
-                .splineTo(new Vector2d(-40.00, -14.5), Math.toRadians(150.00))
-                .lineToLinearHeading(new Pose2d(-62.750, -13.50, Math.toRadians(180.00)))
+                .lineToConstantHeading(new Vector2d(-31.50, -10.0))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(-41.50, -13.5, Math.toRadians(180.00)), Math.toRadians(180.00))
+                .lineToConstantHeading(new Vector2d(-62.75, -13.5))
                 .addDisplacementMarker(5, () ->{
                     motorLeftLift.setTargetPosition(-700);
                     motorRightLift.setTargetPosition(700);
@@ -209,16 +199,16 @@ public class Spline_Park_1PLUS2 extends LinearOpMode
                     motorRightLift.setPower(.75);
                     servoIntake.setPower(-1);
                 })
-                .addTemporalMarker(1, () ->{
+                .addTemporalMarker(.75, () ->{
                     motorLeftLift.setTargetPosition(-730);
                     motorRightLift.setTargetPosition(730);
                     motorLeftLift.setPower(.75);
                     motorRightLift.setPower(.75);
                 })
-                .addTemporalMarker(1.2, () ->{
+                .addTemporalMarker(.9, () ->{
                     servoIntake.setPower(0);
                 })
-                .waitSeconds(1.2)
+                .waitSeconds(1)
                 .build();
 
         TrajectorySequence tspickup_2 = drive.trajectorySequenceBuilder(Cone_Pickup.end())
@@ -229,18 +219,79 @@ public class Spline_Park_1PLUS2 extends LinearOpMode
                     motorRightLift.setPower(.75);
                     servoIntake.setPower(-1);
                 })
-                .addTemporalMarker(1, () ->{
+                .addTemporalMarker(.75, () ->{
                     motorLeftLift.setTargetPosition(-730);
                     motorRightLift.setTargetPosition(730);
                     motorLeftLift.setPower(.75);
                     motorRightLift.setPower(.75);
                 })
-                .addTemporalMarker(1.2, () ->{
+                .addTemporalMarker(.99, () ->{
                     servoIntake.setPower(0);
                 })
-                .waitSeconds(1.75)
+                .waitSeconds(1)
                 .build();
 
+
+
+
+
+TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(-62.75, -13.50, Math.toRadians(180.00)))
+        .UNSTABLE_addTemporalMarkerOffset(1.33,() -> {})
+        .UNSTABLE_addTemporalMarkerOffset(3.41,() -> {})
+        .lineToConstantHeading(new Vector2d(-41.50, -13.5))
+        .setReversed(true)
+        .splineToLinearHeading(new Pose2d(-31.50, -10.0, Math.toRadians(45.00)), Math.toRadians(45.00))
+        .splineToLinearHeading(new Pose2d(-28.00, -7.50, Math.toRadians(45.00)), Math.toRadians(45.00),
+                SampleMecanumDrive.getVelocityConstraint(30, 270, 11.65),
+                SampleMecanumDrive.getAccelerationConstraint(15)
+                )
+                                .addDisplacementMarker(21.25, () ->{
+                                    motorLeftLift.setTargetPosition(-2550);
+                                    motorRightLift.setTargetPosition(2550);
+                                    motorLeftLift.setPower(.75);
+                                    motorRightLift.setPower(.75);
+                                })
+                                .build();
+
+
+        TrajectorySequence Park_1 = drive.trajectorySequenceBuilder(new Pose2d(-28.00, -7.50, Math.toRadians(45.00)))
+                .setReversed(true)
+                .splineTo(new Vector2d(-59.99, -12.72), Math.toRadians(180.00))
+                .addDisplacementMarker(5, () ->{
+                    motorLeftLift.setTargetPosition(0);
+                    motorRightLift.setTargetPosition(0);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                })
+                .build();
+
+        TrajectorySequence Park_2 = drive.trajectorySequenceBuilder(new Pose2d(-28.00, -7.50, Math.toRadians(45.00)))
+                .setReversed(true)
+                .splineTo(new Vector2d(-35.99, -12.72), Math.toRadians(180.00))
+                .addDisplacementMarker(5, () ->{
+                    motorLeftLift.setTargetPosition(0);
+                    motorRightLift.setTargetPosition(0);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                })
+                .build();
+
+        TrajectorySequence Park_3 = drive.trajectorySequenceBuilder(new Pose2d(-28.00, -7.50, Math.toRadians(45.00)))
+                .setReversed(true)
+                .splineTo(new Vector2d(-35.99, -12.72), Math.toRadians(180.00))
+                .setReversed(false)
+                .splineTo(new Vector2d(-12.00, -12.00), Math.toRadians(0.00))
+                .setReversed(true)
+                .addDisplacementMarker(5, () ->{
+                    motorLeftLift.setTargetPosition(0);
+                    motorRightLift.setTargetPosition(0);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                })
+                .build();
+
+
+/*
         TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(-62.750, -13.50, Math.toRadians(180.00)))
                 .UNSTABLE_addTemporalMarkerOffset(1.33,() -> {})
                 .UNSTABLE_addTemporalMarkerOffset(3.41,() -> {})
@@ -254,8 +305,6 @@ public class Spline_Park_1PLUS2 extends LinearOpMode
                     motorRightLift.setPower(.75);
                 })
                 .build();
-
-   /*
 
 TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(-62.75, -13.50, Math.toRadians(180.00)))
         .lineTo(new Vector2d(-39.50, -13.50))
@@ -484,23 +533,19 @@ TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(-62.75
 
                 drive.followTrajectorySequence(Preload);
                 drive.followTrajectorySequence(tsdrop);
+
                 drive.followTrajectorySequence(Cone_Pickup);
                 drive.followTrajectorySequence(tspickup_1);
                 drive.followTrajectorySequence(Placement);
                 drive.followTrajectorySequence(tsdrop);
 
-                /*
                 drive.followTrajectorySequence(Cone_Pickup);
                 drive.followTrajectorySequence(tspickup_2);
                 drive.followTrajectorySequence(Placement);
                 drive.followTrajectorySequence(tsdrop);
 
-                drive.followTrajectorySequence(Cone_Placement);
-                drive.followTrajectorySequence(Cone_Pickup_2);
-                drive.followTrajectorySequence(Cone_Placement);
-                drive.followTrajectorySequence(Cone_Pickup_2);
-                drive.followTrajectorySequence(Cone_Placement);
-*/
+                drive.followTrajectorySequence(Park_1);
+
                 drive.followTrajectorySequence(ts100);
 
 
@@ -512,7 +557,22 @@ TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(-62.75
                 //
 
             }else{
+                drive.followTrajectorySequence(Preload);
+                drive.followTrajectorySequence(tsdrop);
 
+                drive.followTrajectorySequence(Cone_Pickup);
+                drive.followTrajectorySequence(tspickup_1);
+                drive.followTrajectorySequence(Placement);
+                drive.followTrajectorySequence(tsdrop);
+
+                drive.followTrajectorySequence(Cone_Pickup);
+                drive.followTrajectorySequence(tspickup_2);
+                drive.followTrajectorySequence(Placement);
+                drive.followTrajectorySequence(tsdrop);
+
+                drive.followTrajectorySequence(Park_3);
+
+                drive.followTrajectorySequence(ts100);
                 //
             }
 
