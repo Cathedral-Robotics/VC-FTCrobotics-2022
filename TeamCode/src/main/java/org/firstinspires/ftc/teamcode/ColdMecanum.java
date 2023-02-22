@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -7,31 +9,39 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
-
 
 
 @TeleOp
 public class ColdMecanum extends LinearOpMode {
+
+    RevBlinkinLedDriver lights;
     private CRServo servoIntake;
 
-boolean pGA2Y = false;
-boolean pGA2A = false;
+    boolean pGA2Y = false;
+    boolean pGA2A = false;
+
+    boolean pGA2L = false;
+    boolean pGA2R = false;
 
     private PIDController controller;
-    public static double p = 0.0086, i = 0.9, d = 0.00023;
-    public static double f = 0.073;
+public static double p = 0.0086, i = 0.9, d = 0.00023;
+public static double f = 0.073;
 
     public int ArmTarget = 0;
+    private int stack = 490;
+    private int stack_height = 5;
+
+
+    private boolean aButtonWasPressed = false;
+    private boolean bButtonWasPressed = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // Declare our motors
-        // Make sure your ID's match your configuration
+
+        lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
@@ -68,10 +78,10 @@ boolean pGA2A = false;
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
+
             double y = gamepad1.left_stick_y; // Remember, this is reversed!
             double x = -gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
             double rx = -gamepad1.right_stick_x;
-
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio, but only when
             // at least one is out of the range [-1, 1]
@@ -81,11 +91,15 @@ boolean pGA2A = false;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 
+            double totalPower = (Math.abs(frontLeftPower) + Math.abs(backLeftPower)+Math.abs(frontRightPower)+Math.abs(backRightPower));
+
             motorFrontLeft.setPower(frontLeftPower);
             motorBackLeft.setPower(backLeftPower);
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
 
+
+            // controls servoIntake
             if (gamepad2.left_trigger >.5 ) {
                 servoIntake.setPower(1);
             }
@@ -97,25 +111,28 @@ boolean pGA2A = false;
                 servoIntake.setPower(-1);
             }
 
-            if (ArmTarget == 490){
+            if (ArmTarget == stack){
                 servoIntake.setPower(-1);
             }
 
-            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5 && ArmTarget >100 && ArmTarget != 490){
+            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5 && ArmTarget >100 && ArmTarget != stack){
                 servoIntake.setPower(0);
             }
 
+            if (totalPower > 0.1){
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_BEATS_PER_MINUTE);
+            }
+            if (totalPower < 0.1){
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            }
 
-            //MECHANISM CODE
-//134.4 ticks per rotation
-// max extension at 8.7 * 134.4
-
+            // controls ArmTarget
 
             if (gamepad2.left_bumper) {
                 ArmTarget = 70; //intaking
             }
             else if (gamepad2.back) {
-                ArmTarget = 490; //Cone Stack
+                ArmTarget = stack; //Cone Stack
             }
             else if (gamepad2.dpad_down) {
                 ArmTarget = 1040; //Low level
@@ -124,10 +141,26 @@ boolean pGA2A = false;
                 ArmTarget = 1780; //Mid level
             }
             else if (gamepad2.right_bumper) {
-                ArmTarget = 2550; //High level (4400 max)
+                ArmTarget = 2550; //High level
             }
 
-//code for manual override adjustments for lift
+            // Check if the left joystick button on gamepad 2 is pressed
+            boolean leftStickButtonIsPressed = gamepad2.left_stick_button;
+            if (leftStickButtonIsPressed && !aButtonWasPressed) {
+                // Button was just pressed, decrease the stack by 105 but don't let it go below 70
+                stack = Math.max(70, stack - 105);
+            }
+            aButtonWasPressed = leftStickButtonIsPressed;
+
+            // Check if the right joystick button on gamepad 2 is pressed
+            boolean rightStickButtonIsPressed = gamepad2.right_stick_button;
+            if (rightStickButtonIsPressed && !bButtonWasPressed) {
+                // Button was just pressed, increase the stack by 105 but don't let it go above 490
+                stack = Math.min(490, stack + 105);
+            }
+            bButtonWasPressed = rightStickButtonIsPressed;
+
+            //code for manual override adjustments for lift
 
             boolean ga2y = gamepad2.y;
             boolean ga2a = gamepad2.a;
@@ -150,6 +183,14 @@ boolean pGA2A = false;
                 ArmTarget = ArmTarget - 50;
             }
 
+            if(stack == 490){stack_height = 5;}
+            if(stack == 385){stack_height = 4;}
+            if(stack == 280){stack_height = 3;}
+            if(stack == 175){stack_height = 2;}
+            if(stack == 70){stack_height = 1;}
+
+
+
 
             //stuff for arm position control
             controller = new PIDController(p, i , d);
@@ -160,10 +201,11 @@ boolean pGA2A = false;
             motorLeftLift.setPower(pid + f);
             motorRightLift.setPower(pid + f);
 
+
+            telemetry.addData("Stack",stack_height);
+
             telemetry.addData("pos",SlidesPos );
             telemetry.addData("target", ArmTarget);
-            telemetry.update();
-
 
             telemetry.update();
 
