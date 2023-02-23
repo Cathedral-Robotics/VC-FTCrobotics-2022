@@ -22,8 +22,8 @@ public class ColdMecanum extends LinearOpMode {
     boolean pGA2Y = false;
     boolean pGA2A = false;
 
-    boolean pGA2L = false;
-    boolean pGA2R = false;
+    boolean pGA2B = false;
+    boolean pGA2X = false;
 
     private PIDController controller;
 public static double p = 0.0086, i = 0.9, d = 0.00023;
@@ -165,23 +165,28 @@ public static double f = 0.073;
             boolean ga2y = gamepad2.y;
             boolean ga2a = gamepad2.a;
 
-            if (ga2y && !pGA2Y && ArmTarget<=2550 && !gamepad2.dpad_right) {
+            if (ga2y && !pGA2Y && ArmTarget<=2550) {
                 ArmTarget = ArmTarget + 50; //used to be 100
             }
             pGA2Y = ga2y;
 
-            if (ga2a && !pGA2A && ArmTarget>=50 && !gamepad2.dpad_right) {
+            if (ga2a && !pGA2A && ArmTarget>=50) {
                 ArmTarget = ArmTarget - 50; //used to be 100
             }
             pGA2A = ga2a;
 
-            if (ga2y && !pGA2Y && gamepad2.dpad_right) {
-                ArmTarget = ArmTarget + 50;
-            }
+            boolean ga2b = gamepad2.b;
+            boolean ga2x = gamepad2.x;
 
-            if (ga2a && !pGA2A && gamepad2.dpad_right) {
-                ArmTarget = ArmTarget - 50;
+            if (ga2b && !pGA2B) {
+                ArmTarget = ArmTarget + 50; //used to be 100
             }
+            pGA2B = ga2b;
+
+            if (ga2x && !pGA2X) {
+                ArmTarget = ArmTarget - 50; //used to be 100
+            }
+            pGA2X = ga2x;
 
             if(stack == 490){stack_height = 5;}
             if(stack == 385){stack_height = 4;}
