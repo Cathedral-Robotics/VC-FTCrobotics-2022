@@ -19,6 +19,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 @Autonomous
+@Disabled
 
 
 public class Parking_1PLUS1 extends LinearOpMode
