@@ -88,7 +88,7 @@ public class HighMidMidPark extends LinearOpMode
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(36.00, -10.00, Math.toRadians(90.00)), Math.toRadians(90.00))
 
-                .splineToLinearHeading(new Pose2d(29.0, -7.0, Math.toRadians(135.00)), Math.toRadians(135.00))
+                .splineToLinearHeading(new Pose2d(30.5, -7.75, Math.toRadians(135.00)), Math.toRadians(135.00))
 
                 .addDisplacementMarker(48, () ->{
                     motorLeftLift.setTargetPosition(-2560);
@@ -105,10 +105,18 @@ public class HighMidMidPark extends LinearOpMode
                     servoIntake.setPower(1);
 
                 })
+                .waitSeconds(.85)
+                .build();
+
+        TrajectorySequence tsdroplong = drive.trajectorySequenceBuilder(Preload.end())
+                .addTemporalMarker(.030, () ->{
+                    servoIntake.setPower(1);
+
+                })
                 .waitSeconds(1)
                 .build();
 
-        TrajectorySequence Cone_Pickup = drive.trajectorySequenceBuilder(new Pose2d(29.00, -9.00, Math.toRadians(135.00)))
+        TrajectorySequence Cone_Pickup = drive.trajectorySequenceBuilder(new Pose2d(30.5, -7.75, Math.toRadians(135.00)))
                 .lineToConstantHeading(new Vector2d(31.50, -10.0))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(41.50, -13.5, Math.toRadians(0)), Math.toRadians(0))
@@ -186,11 +194,11 @@ TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(67.75,
         .UNSTABLE_addTemporalMarkerOffset(3.41,() -> {})
         .lineToConstantHeading(new Vector2d(39.50, -13.5))
         .setReversed(true)
-        .splineToLinearHeading(new Pose2d(31.50, -12.0, Math.toRadians(225.00)), Math.toRadians(225.00))
+        .splineToLinearHeading(new Pose2d(33.50, -17.0, Math.toRadians(225.00)), Math.toRadians(225.00))
         .setReversed(false)
-        .splineToLinearHeading(new Pose2d(31.50, -21.0, Math.toRadians(225.00)), Math.toRadians(225.00),
-                SampleMecanumDrive.getVelocityConstraint(30, 270, 11.65),
-                SampleMecanumDrive.getAccelerationConstraint(15)
+        .splineToLinearHeading(new Pose2d(31.50, -22.0, Math.toRadians(225.00)), Math.toRadians(225.00),
+                SampleMecanumDrive.getVelocityConstraint(35, 270, 11.65),
+                SampleMecanumDrive.getAccelerationConstraint(35)
 
                 )
                                 .addDisplacementMarker(21.25, () ->{
@@ -201,11 +209,53 @@ TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(67.75,
                                 })
                                 .build();
 
+        TrajectorySequence Park_1 = drive.trajectorySequenceBuilder(new Pose2d(31.50, -21.00, Math.toRadians(225.00)))
+                .setReversed(true)
+                .splineTo(new Vector2d(38.00, -13.50), Math.toRadians(0.00))
+                .setReversed(false)
+                .lineToConstantHeading(new Vector2d(14.125, -12.5))
+
+
+                .addDisplacementMarker(4.25, () ->{
+                    motorLeftLift.setTargetPosition(-0);
+                    motorRightLift.setTargetPosition(0);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                    servoIntake.setPower(0);
+                })
+
+                .build();
 
         TrajectorySequence Park_2 = drive.trajectorySequenceBuilder(new Pose2d(31.50, -21.00, Math.toRadians(225.00)))
                 .setReversed(true)
-                .splineTo(new Vector2d(42.00, -11.50), Math.toRadians(0.00))
+                .splineTo(new Vector2d(40.00, -12.50), Math.toRadians(0.00))
                 .setReversed(false)
+
+                .addDisplacementMarker(4.25, () ->{
+                    motorLeftLift.setTargetPosition(-0);
+                    motorRightLift.setTargetPosition(0);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                    servoIntake.setPower(0);
+                })
+
+                .build();
+
+        TrajectorySequence Park_3 = drive.trajectorySequenceBuilder(new Pose2d(31.50, -21.00, Math.toRadians(225.00)))
+                .setReversed(true)
+                .splineTo(new Vector2d(40.00, -12.50), Math.toRadians(0.00))
+                .setReversed(true)
+                .splineTo(new Vector2d(62.00, -12.50), Math.toRadians(0.00))
+
+
+                .addDisplacementMarker(4.25, () ->{
+                    motorLeftLift.setTargetPosition(-0);
+                    motorRightLift.setTargetPosition(0);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                    servoIntake.setPower(0);
+                })
+
                 .build();
 
 
@@ -346,7 +396,7 @@ TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(67.75,
 
 
                 drive.followTrajectorySequence(Preload);
-                drive.followTrajectorySequence(tsdrop);
+                drive.followTrajectorySequence(tsdroplong);
 
                 drive.followTrajectorySequence(Cone_Pickup);
                 drive.followTrajectorySequence(tspickup_1);
@@ -357,7 +407,7 @@ TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(67.75,
                 drive.followTrajectorySequence(tspickup_2);
                 drive.followTrajectorySequence(Placement);
                 drive.followTrajectorySequence(tsdrop);
-                drive.followTrajectorySequence(Park_2);
+                drive.followTrajectorySequence(Park_1);
 
 
 
@@ -371,8 +421,36 @@ TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(67.75,
             }else if(tagOfInterest.id == MIDDLE){
 
                 //
+                drive.followTrajectorySequence(Preload);
+                drive.followTrajectorySequence(tsdroplong);
+
+                drive.followTrajectorySequence(Cone_Pickup);
+                drive.followTrajectorySequence(tspickup_1);
+                drive.followTrajectorySequence(Placement);
+                drive.followTrajectorySequence(tsdrop);
+
+                drive.followTrajectorySequence(Cone_Pickup_2);
+                drive.followTrajectorySequence(tspickup_2);
+                drive.followTrajectorySequence(Placement);
+                drive.followTrajectorySequence(tsdrop);
+                drive.followTrajectorySequence(Park_2);
 
             }else{
+
+                drive.followTrajectorySequence(Preload);
+                drive.followTrajectorySequence(tsdroplong);
+
+                drive.followTrajectorySequence(Cone_Pickup);
+                drive.followTrajectorySequence(tspickup_1);
+                drive.followTrajectorySequence(Placement);
+                drive.followTrajectorySequence(tsdrop);
+
+                drive.followTrajectorySequence(Cone_Pickup_2);
+                drive.followTrajectorySequence(tspickup_2);
+                drive.followTrajectorySequence(Placement);
+                drive.followTrajectorySequence(tsdrop);
+                drive.followTrajectorySequence(Park_3);
+
 
             }
 
