@@ -82,6 +82,20 @@ public class HighMidMidPark extends LinearOpMode
         int ArmTarget = 0;
 
 
+        TrajectorySequence NewPreload = drive.trajectorySequenceBuilder(new Pose2d(36.00, -65.00, Math.toRadians(90.00)))
+                .splineToSplineHeading(new Pose2d(36.00, -50.00, Math.toRadians(155.00)), Math.toRadians(90.00))
+                .splineToSplineHeading(new Pose2d(36.00, -12.00, Math.toRadians(135.00)), Math.toRadians(90.00))
+                .splineToLinearHeading(new Pose2d(28, -8.75, Math.toRadians(135.00)), Math.toRadians(135.00))
+                .addDisplacementMarker(38, () ->{
+                    motorLeftLift.setTargetPosition(-2560);
+                    motorRightLift.setTargetPosition(2560);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                })
+                .build();
+        drive.setPoseEstimate(NewPreload.start());
+
+
         TrajectorySequence Preload = drive.trajectorySequenceBuilder(new Pose2d(36.00, -65.00, Math.toRadians(90.00)))
                 .UNSTABLE_addTemporalMarkerOffset(0.00,() -> {})
                 .splineToLinearHeading(new Pose2d(36.00, -7.00, Math.toRadians(90.00)), Math.toRadians(90.00))
@@ -113,11 +127,11 @@ public class HighMidMidPark extends LinearOpMode
                     servoIntake.setPower(1);
 
                 })
-                .waitSeconds(1)
+                .waitSeconds(1.4)
                 .build();
 
         TrajectorySequence Cone_Pickup = drive.trajectorySequenceBuilder(new Pose2d(30.5, -7.75, Math.toRadians(135.00)))
-                .lineToConstantHeading(new Vector2d(31.50, -10.0))
+                .lineToConstantHeading(new Vector2d(32.5, -11))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(41.50, -13.5, Math.toRadians(0)), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(64.75, -13.75))
@@ -144,6 +158,19 @@ public class HighMidMidPark extends LinearOpMode
                 })
                 .build();
 
+        TrajectorySequence New_Cone_Pickup_2 = drive.trajectorySequenceBuilder(new Pose2d(28.00, -16.50, Math.toRadians(225.00)))
+                .lineToConstantHeading(new Vector2d(35.50, -10.0))
+                .setReversed(false)
+                .splineToSplineHeading(new Pose2d(41.50, -13.5, Math.toRadians(0)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(64.750, -13.750, Math.toRadians(0)), Math.toRadians(0))
+                .addDisplacementMarker(5, () ->{
+                    motorLeftLift.setTargetPosition(-700);
+                    motorRightLift.setTargetPosition(700);
+                    motorLeftLift.setPower(.75);
+                    motorRightLift.setPower(.75);
+                    servoIntake.setPower(0);
+                })
+                .build();
 
 
 
@@ -189,12 +216,12 @@ public class HighMidMidPark extends LinearOpMode
 
 
 
-TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(67.75, -13, Math.toRadians(0)))
+TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(64.75, -13, Math.toRadians(0)))
         .UNSTABLE_addTemporalMarkerOffset(1.33,() -> {})
         .UNSTABLE_addTemporalMarkerOffset(3.41,() -> {})
         .lineToConstantHeading(new Vector2d(39.50, -13.5))
         .setReversed(true)
-        .splineToLinearHeading(new Pose2d(33.50, -17.0, Math.toRadians(225.00)), Math.toRadians(225.00))
+        .splineToLinearHeading(new Pose2d(35.50, -17.0, Math.toRadians(225.00)), Math.toRadians(225.00)) //was 33.5
         .setReversed(false)
         .splineToLinearHeading(new Pose2d(31.50, -22.0, Math.toRadians(225.00)), Math.toRadians(225.00),
                 SampleMecanumDrive.getVelocityConstraint(35, 270, 11.65),
@@ -395,7 +422,7 @@ TrajectorySequence Placement = drive.trajectorySequenceBuilder(new Pose2d(67.75,
             if(tagOfInterest == null || tagOfInterest.id == LEFT){
 
 
-                drive.followTrajectorySequence(Preload);
+                drive.followTrajectorySequence(NewPreload);
                 drive.followTrajectorySequence(tsdroplong);
 
                 drive.followTrajectorySequence(Cone_Pickup);
