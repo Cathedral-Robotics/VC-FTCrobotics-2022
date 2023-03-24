@@ -113,11 +113,11 @@ public class Right_1PLUS2 extends LinearOpMode{
         drive.setPoseEstimate(Preload.start());
 
 
-        TrajectorySequence Cone_Pickup = drive.trajectorySequenceBuilder(Preload.end())
+        TrajectorySequence Cone_Pickup = drive.trajectorySequenceBuilder(new Pose2d(30.5, -7.75, Math.toRadians(135)))
                 .lineToConstantHeading(new Vector2d(32.5, -11))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(41.50, -13.5, Math.toRadians(0)), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(64.75, -13.75))
+                .splineToLinearHeading(new Pose2d(41.50, -15, Math.toRadians(0)), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(64.75, -15))
                 .addDisplacementMarker(5, () ->{
                     ArmTarget = 700;
                     IntakePower=0;
@@ -130,12 +130,13 @@ public class Right_1PLUS2 extends LinearOpMode{
                 .UNSTABLE_addTemporalMarkerOffset(3.41,() -> {})
                 .lineToConstantHeading(new Vector2d(39.50, -13.5))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(32.50, -10.75, Math.toRadians(45.00)), Math.toRadians(45.00))
-                .splineToLinearHeading(new Pose2d(30.50, -8.75, Math.toRadians(45.00)), Math.toRadians(45.00),
+                .splineToLinearHeading(new Pose2d(34.50, -14.75, Math.toRadians(135)), Math.toRadians(135))
+                .setReversed(false)
+                .splineToLinearHeading(new Pose2d(30.5, -7.75, Math.toRadians(135)), Math.toRadians(135),
                         SampleMecanumDrive.getVelocityConstraint(30, 270, 11.65),
                         SampleMecanumDrive.getAccelerationConstraint(15)
                 )
-                .addDisplacementMarker(18.25, () ->{
+                .addDisplacementMarker(25.25, () ->{
                     ArmTarget = 2600;
                 })
                 .build();
@@ -180,7 +181,7 @@ public class Right_1PLUS2 extends LinearOpMode{
                 .setReversed(true)
                 .splineTo(new Vector2d(40.00, -12.50), Math.toRadians(0.00))
                 .setReversed(false)
-                .addDisplacementMarker(5, () ->{
+                .addDisplacementMarker(10, () ->{
                    ArmTarget=700;
                    IntakePower=0;
                 })
@@ -191,7 +192,7 @@ public class Right_1PLUS2 extends LinearOpMode{
                 .splineTo(new Vector2d(40.00, -12.50), Math.toRadians(0.00))
                 .setReversed(true)
                 .splineTo(new Vector2d(62.00, -12.50), Math.toRadians(0.00))
-                .addDisplacementMarker(5, () ->{
+                .addDisplacementMarker(10, () ->{
                     ArmTarget=700;
                     IntakePower=0;
                 })
@@ -359,45 +360,15 @@ public class Right_1PLUS2 extends LinearOpMode{
                     case TSDROP_2:
                         // Check if the drive class is busy following the trajectory
                         // Move on to the next state, TURN_1, once finished
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.CONE_PICKUP_2;
-                            drive.followTrajectorySequenceAsync(Cone_Pickup);
-                        }
-                        break;
-                    case CONE_PICKUP_2:
-                        // Check if the drive class is busy turning
-                        // If not, move onto the next state, TRAJECTORY_3, once finished
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.TSPICKUP_2;
-                            drive.followTrajectorySequenceAsync(tspickup_2);
-                        }
-                        break;
-                    case TSPICKUP_2:
-                        // Check if the drive class is busy following the trajectory
-                        // If not, move onto the next state, WAIT_1
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.PLACEMENT_2;
-                            drive.followTrajectorySequenceAsync(Placement);
-                        }
-                        break;
-                    case PLACEMENT_2:
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.TSDROP_3;
-                            drive.followTrajectorySequenceAsync(tsdrop);
-                        }
-                        break;
-                    case TSDROP_3:
-                        // Check if the drive class is busy following the trajectory
-                        // Move on to the next state, TURN_1, once finished
-                        if (!drive.isBusy() && tagOfInterest.id == LEFT && waitTimer1.seconds() >= 27.5) {
+                        if (!drive.isBusy() && tagOfInterest.id == LEFT && waitTimer1.seconds() >= 17.75) {
                             currentState = AsyncFollowing.State.PARK_1;
                             drive.followTrajectorySequenceAsync(Cone_Pickup);
                         }
-                        if (!drive.isBusy() && tagOfInterest.id == MIDDLE && waitTimer1.seconds() >= 27.5) {
+                        if (!drive.isBusy() && tagOfInterest.id == MIDDLE && waitTimer1.seconds() >= 17.75) {
                             currentState = AsyncFollowing.State.PARK_2;
                             drive.followTrajectorySequenceAsync(Park_2);
                         }
-                        if (!drive.isBusy() && tagOfInterest == null || tagOfInterest.id == RIGHT && waitTimer1.seconds() >= 27.5) {
+                        if (!drive.isBusy() && tagOfInterest == null || tagOfInterest.id == RIGHT && waitTimer1.seconds() >= 17.75) {
                             currentState = AsyncFollowing.State.PARK_3;
                             drive.followTrajectorySequenceAsync(Park_3);
                         }

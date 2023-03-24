@@ -59,6 +59,7 @@ public class ASYNC_1PLUS2 extends LinearOpMode{
     Pose2d startPose = new Pose2d(15, 10, Math.toRadians(90));
     public int ArmTarget = 0;
     public int IntakePower = 0;
+    boolean NoTag = true;
 
     OpenCvCamera camera;
 
@@ -300,6 +301,8 @@ public class ASYNC_1PLUS2 extends LinearOpMode{
             sleep(20);
         }
 
+
+
         /*
          * The START command just came in: now work off the latest snapshot acquired
          * during the init loop.
@@ -310,13 +313,16 @@ public class ASYNC_1PLUS2 extends LinearOpMode{
         {
             telemetry.addLine("Tag snapshot:\n");
             tagToTelemetry(tagOfInterest);
+            NoTag = false;
             telemetry.update();
         }
         else
         {
+            NoTag = true;
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
             telemetry.update();
         }
+
 
         while (opModeIsActive()){
 
@@ -395,7 +401,7 @@ public class ASYNC_1PLUS2 extends LinearOpMode{
                     case TSDROP_3:
                         // Check if the drive class is busy following the trajectory
                         // Move on to the next state, TURN_1, once finished
-                        if (!drive.isBusy() && tagOfInterest.id == LEFT && waitTimer1.seconds() >= 27.5) {
+                        if (!drive.isBusy() && tagOfInterest.id == LEFT && waitTimer1.seconds() >= 26.5) {
                             currentState = AsyncFollowing.State.PARK_1;
                             drive.followTrajectorySequenceAsync(Cone_Pickup);
                         }
@@ -403,11 +409,16 @@ public class ASYNC_1PLUS2 extends LinearOpMode{
                             currentState = AsyncFollowing.State.PARK_2;
                             drive.followTrajectorySequenceAsync(Park_2);
                         }
-                        if (!drive.isBusy() && tagOfInterest == null || tagOfInterest.id == RIGHT && waitTimer1.seconds() >= 27.5) {
+                        if (!drive.isBusy() && tagOfInterest.id == RIGHT && waitTimer1.seconds() >= 26.5) {
                             currentState = AsyncFollowing.State.PARK_3;
                             drive.followTrajectorySequenceAsync(Park_3);
                         }
-                        break;
+                        if (!drive.isBusy() && tagOfInterest == null && waitTimer1.seconds() >= 26.5) {
+                        currentState = AsyncFollowing.State.PARK_3;
+                        drive.followTrajectorySequenceAsync(Cone_Pickup);
+                         }
+                    break;
+
 
                     case PARK_1:
                         // Check if the drive class is busy turning
@@ -497,6 +508,7 @@ public class ASYNC_1PLUS2 extends LinearOpMode{
 
             telemetry.addData("pos",SlidesPos );
             telemetry.addData("target", ArmTarget);
+            telemetry.addData("Notag", NoTag);
             telemetry.update();
         }
     }
