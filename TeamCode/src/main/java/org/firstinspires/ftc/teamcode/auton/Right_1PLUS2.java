@@ -91,8 +91,8 @@ public class Right_1PLUS2 extends LinearOpMode{
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-       Lift lift = new Lift(hardwareMap);
-       Intake intake = new Intake(hardwareMap);
+        Lift lift = new Lift(hardwareMap);
+        Intake intake = new Intake(hardwareMap);
 
         // telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -182,8 +182,8 @@ public class Right_1PLUS2 extends LinearOpMode{
                 .splineTo(new Vector2d(40.00, -12.50), Math.toRadians(0.00))
                 .setReversed(false)
                 .addDisplacementMarker(10, () ->{
-                   ArmTarget=700;
-                   IntakePower=0;
+                    ArmTarget=700;
+                    IntakePower=0;
                 })
                 .build();
 
@@ -315,92 +315,92 @@ public class Right_1PLUS2 extends LinearOpMode{
 
         while (opModeIsActive()){
 
-                switch (currentState) {
-                    case PRELOAD:
-                        // Check if the drive class isn't busy
-                        // `isBusy() == true` while it's following the trajectory
-                        // We move on to the next state
-                        // Make sure we use the async follow function
-                        if (!drive.isBusy()) {                    // Once `isBusy() == false`, the trajectory follower signals that it is finished
+            switch (currentState) {
+                case PRELOAD:
+                    // Check if the drive class isn't busy
+                    // `isBusy() == true` while it's following the trajectory
+                    // We move on to the next state
+                    // Make sure we use the async follow function
+                    if (!drive.isBusy()) {                    // Once `isBusy() == false`, the trajectory follower signals that it is finished
 
-                            currentState = AsyncFollowing.State.TSDROP_1;
-                            drive.followTrajectorySequenceAsync(tsdrop);
-                        }
-                        break;
-                    case TSDROP_1:
-                        // Check if the drive class is busy following the trajectory
-                        // Move on to the next state, TURN_1, once finished
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.CONE_PICKUP_1;
-                            drive.followTrajectorySequenceAsync(Cone_Pickup);
-                        }
-                        break;
-                    case CONE_PICKUP_1:
-                        // Check if the drive class is busy turning
-                        // If not, move onto the next state, TRAJECTORY_3, once finished
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.TSPICKUP_1;
-                            drive.followTrajectorySequenceAsync(tspickup_1);
-                        }
-                        break;
-                    case TSPICKUP_1:
-                        // Check if the drive class is busy following the trajectory
-                        // If not, move onto the next state, WAIT_1
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.PLACEMENT_1;
-                            drive.followTrajectorySequenceAsync(Placement);
-                        }
-                        break;
-                    case PLACEMENT_1:
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.TSDROP_2;
-                            drive.followTrajectorySequenceAsync(tsdrop);
-                        }
-                        break;
-                    case TSDROP_2:
-                        // Check if the drive class is busy following the trajectory
-                        // Move on to the next state, TURN_1, once finished
-                        if (!drive.isBusy() && tagOfInterest.id == LEFT && waitTimer1.seconds() >= 17.75) {
-                            currentState = AsyncFollowing.State.PARK_1;
-                            drive.followTrajectorySequenceAsync(Cone_Pickup);
-                        }
-                        if (!drive.isBusy() && tagOfInterest.id == MIDDLE && waitTimer1.seconds() >= 17.75) {
-                            currentState = AsyncFollowing.State.PARK_2;
-                            drive.followTrajectorySequenceAsync(Park_2);
-                        }
-                        if (!drive.isBusy() && tagOfInterest == null || tagOfInterest.id == RIGHT && waitTimer1.seconds() >= 17.75) {
-                            currentState = AsyncFollowing.State.PARK_3;
-                            drive.followTrajectorySequenceAsync(Park_3);
-                        }
-                        break;
+                        currentState = AsyncFollowing.State.TSDROP_1;
+                        drive.followTrajectorySequenceAsync(tsdrop);
+                    }
+                    break;
+                case TSDROP_1:
+                    // Check if the drive class is busy following the trajectory
+                    // Move on to the next state, TURN_1, once finished
+                    if (!drive.isBusy()) {
+                        currentState = AsyncFollowing.State.CONE_PICKUP_1;
+                        drive.followTrajectorySequenceAsync(Cone_Pickup);
+                    }
+                    break;
+                case CONE_PICKUP_1:
+                    // Check if the drive class is busy turning
+                    // If not, move onto the next state, TRAJECTORY_3, once finished
+                    if (!drive.isBusy()) {
+                        currentState = AsyncFollowing.State.TSPICKUP_1;
+                        drive.followTrajectorySequenceAsync(tspickup_1);
+                    }
+                    break;
+                case TSPICKUP_1:
+                    // Check if the drive class is busy following the trajectory
+                    // If not, move onto the next state, WAIT_1
+                    if (!drive.isBusy()) {
+                        currentState = AsyncFollowing.State.PLACEMENT_1;
+                        drive.followTrajectorySequenceAsync(Placement);
+                    }
+                    break;
+                case PLACEMENT_1:
+                    if (!drive.isBusy()) {
+                        currentState = AsyncFollowing.State.TSDROP_2;
+                        drive.followTrajectorySequenceAsync(tsdrop);
+                    }
+                    break;
+                case TSDROP_2:
+                    // Check if the drive class is busy following the trajectory
+                    // Move on to the next state, TURN_1, once finished
+                    if (!drive.isBusy() && tagOfInterest.id == LEFT && waitTimer1.seconds() >= 17.75) {
+                        currentState = AsyncFollowing.State.PARK_1;
+                        drive.followTrajectorySequenceAsync(Cone_Pickup);
+                    }
+                    if (!drive.isBusy() && tagOfInterest.id == MIDDLE && waitTimer1.seconds() >= 17.75) {
+                        currentState = AsyncFollowing.State.PARK_2;
+                        drive.followTrajectorySequenceAsync(Park_2);
+                    }
+                    if (!drive.isBusy() && tagOfInterest == null || tagOfInterest.id == RIGHT && waitTimer1.seconds() >= 17.75) {
+                        currentState = AsyncFollowing.State.PARK_3;
+                        drive.followTrajectorySequenceAsync(Park_3);
+                    }
+                    break;
 
-                    case PARK_1:
-                        // Check if the drive class is busy turning
-                        // If not, move onto the next state, TRAJECTORY_3, once finished
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.IDLE;
-                        }
-                        break;
-                    case PARK_2:
-                        // Check if the drive class is busy turning
-                        // If not, move onto the next state, TRAJECTORY_3, once finished
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.IDLE;
-                        }
-                        break;
-                    case PARK_3:
-                        // Check if the drive class is busy turning
-                        // If not, move onto the next state, TRAJECTORY_3, once finished
-                        if (!drive.isBusy()) {
-                            currentState = AsyncFollowing.State.IDLE;
-                        }
-                        break;
-                    case IDLE:
-                        // Do nothing in IDLE
-                        // currentState does not change once in IDLE
-                        // This concludes the autonomous program
-                        break;
-                }
+                case PARK_1:
+                    // Check if the drive class is busy turning
+                    // If not, move onto the next state, TRAJECTORY_3, once finished
+                    if (!drive.isBusy()) {
+                        currentState = AsyncFollowing.State.IDLE;
+                    }
+                    break;
+                case PARK_2:
+                    // Check if the drive class is busy turning
+                    // If not, move onto the next state, TRAJECTORY_3, once finished
+                    if (!drive.isBusy()) {
+                        currentState = AsyncFollowing.State.IDLE;
+                    }
+                    break;
+                case PARK_3:
+                    // Check if the drive class is busy turning
+                    // If not, move onto the next state, TRAJECTORY_3, once finished
+                    if (!drive.isBusy()) {
+                        currentState = AsyncFollowing.State.IDLE;
+                    }
+                    break;
+                case IDLE:
+                    // Do nothing in IDLE
+                    // currentState does not change once in IDLE
+                    // This concludes the autonomous program
+                    break;
+            }
 
             // We update drive continuously in the background, regardless of state
             drive.update();

@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.ArrayList;
 
 @Autonomous
-@Disabled
+
 
 public class RR_Parking extends LinearOpMode
 {OpenCvCamera camera;
@@ -44,9 +44,9 @@ public class RR_Parking extends LinearOpMode
     double tagsize = 0.166;
 
     // Tag ID 1,2,3 from the 36h11 family
-    int LEFT = 1;
-    int MIDDLE = 2;
-    int RIGHT = 3;
+    int LEFT = 111;
+    int MIDDLE = 222;
+    int RIGHT = 333;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -58,15 +58,15 @@ public class RR_Parking extends LinearOpMode
         Pose2d startPose = new Pose2d(0,0,Math.toRadians(0));
 
         Trajectory traj1 = drive.trajectoryBuilder((startPose))
-                .back(27)
+                .forward(27)
                 .build();
 
         Trajectory trajLeft = drive.trajectoryBuilder(traj1.end())
-                .strafeRight(24)
+                .strafeLeft(24)
                 .build();
 
         Trajectory trajRight = drive.trajectoryBuilder(traj1.end())
-                .strafeLeft(24)
+                .strafeRight(24)
                 .build();
 
 

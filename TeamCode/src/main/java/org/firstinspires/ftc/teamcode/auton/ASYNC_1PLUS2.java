@@ -102,7 +102,7 @@ public class ASYNC_1PLUS2 extends LinearOpMode{
 
         // telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        TrajectorySequence Preload = drive.trajectorySequenceBuilder(new Pose2d(-36.00, -65.00, Math.toRadians(90.00)))
+        TrajectorySequence Preload = drive.trajectorySequenceBuilder(new Pose2d(-35.40, -64.75, Math.toRadians(90.00)))
                 .UNSTABLE_addTemporalMarkerOffset(0.00,() -> {})
                 .splineToLinearHeading(new Pose2d(-36.00, -7.00, Math.toRadians(90.00)), Math.toRadians(90.00))
                 .setReversed(true)
@@ -414,10 +414,11 @@ public class ASYNC_1PLUS2 extends LinearOpMode{
                             drive.followTrajectorySequenceAsync(Park_3);
                         }
                         if (!drive.isBusy() && tagOfInterest == null && waitTimer1.seconds() >= 26.5) {
-                        currentState = AsyncFollowing.State.PARK_3;
-                        drive.followTrajectorySequenceAsync(Cone_Pickup);
-                         }
-                    break;
+                            currentState = AsyncFollowing.State.PARK_3;
+                            drive.followTrajectorySequenceAsync(Cone_Pickup);
+                        }
+                        break;
+
 
 
                     case PARK_1:

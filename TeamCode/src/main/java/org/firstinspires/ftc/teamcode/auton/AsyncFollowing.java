@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -38,6 +39,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
  */
 
 @Autonomous(group = "auton")
+@Disabled
 public class AsyncFollowing extends LinearOpMode {
 
     // This enum defines our "state"
@@ -57,7 +59,7 @@ public class AsyncFollowing extends LinearOpMode {
         TSPICKUP_3,
         PLACEMENT_3,
         TSDROP_4,
-        IDLE            // Our bot will enter the IDLE state when done
+        Park_1, PARK_1, PARK_2, PARK_3, IDLE            // Our bot will enter the IDLE state when done
     }
 
     // We define the current state we're on
@@ -84,14 +86,15 @@ public class AsyncFollowing extends LinearOpMode {
         drive.setPoseEstimate(startPose);
 
         // Let's define our trajectories
-        TrajectorySequence Preload = drive.trajectorySequenceBuilder(new Pose2d(-36.00, -65.00, Math.toRadians(90.00)))
+        TrajectorySequence Preload = drive.trajectorySequenceBuilder(new Pose2d(-35.50, -65.00, Math.toRadians(90.00)))
                 .UNSTABLE_addTemporalMarkerOffset(0.00,() -> {})
                 .splineToLinearHeading(new Pose2d(-36.00, -7.00, Math.toRadians(90.00)), Math.toRadians(90.00))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-36.00, -10.00, Math.toRadians(90.00)), Math.toRadians(90.00))
-                .splineToLinearHeading(new Pose2d(-28.00, -8.0, Math.toRadians(45.00)), Math.toRadians(45.00))
+                .splineToLinearHeading(new Pose2d(-28.00, -8.00, Math.toRadians(45.00)), Math.toRadians(45.00))
 
-                .addDisplacementMarker(30, () ->{
+
+                .addDisplacementMarker(42, () ->{
                     ArmTarget = 2600;
                 })
 
@@ -103,7 +106,7 @@ public class AsyncFollowing extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(-31.50, -10.0))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-41.50, -13.5, Math.toRadians(180.00)), Math.toRadians(180.00))
-                .lineToConstantHeading(new Vector2d(-61, -13.5))
+                .lineToConstantHeading(new Vector2d(-61.75, -13.5))
                 .addDisplacementMarker(5, () ->{
                     ArmTarget = 700;
                 })
@@ -279,27 +282,6 @@ public class AsyncFollowing extends LinearOpMode {
                 case CONE_PICKUP_3:
                     // Check if the drive class is busy turning
                     // If not, move onto the next state, TRAJECTORY_3, once finished
-                    if (!drive.isBusy()) {
-                        currentState = State.TSPICKUP_3;
-                        drive.followTrajectorySequenceAsync(tspickup_3);
-                    }
-                    break;
-                case TSPICKUP_3:
-                    // Check if the drive class is busy following the trajectory
-                    // If not, move onto the next state, WAIT_1
-                    if (!drive.isBusy()) {
-                        currentState = State.PLACEMENT_3;
-                        drive.followTrajectorySequenceAsync(Placement);
-                    }
-                    break;
-                case PLACEMENT_3:
-                    if (!drive.isBusy()) {
-                        currentState = State.TSDROP_4;
-                        drive.followTrajectorySequenceAsync(tsdrop);
-                    }
-                    break;
-
-                case TSDROP_4:
                     if (!drive.isBusy()) {
                         currentState = State.IDLE;
                     }

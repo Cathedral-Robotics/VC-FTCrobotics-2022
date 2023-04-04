@@ -7,12 +7,14 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -22,13 +24,17 @@ import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
 
 @Autonomous
+@Disabled
+
 
 public class Spline_Park_1PLUS2 extends LinearOpMode
 {OpenCvCamera camera;
+    RevBlinkinLedDriver lights;
     private CRServo servoIntake;
 /*
     private PIDController controller;
@@ -87,6 +93,7 @@ public class Spline_Park_1PLUS2 extends LinearOpMode
         motorLeftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorRightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         int ArmTarget = 0;
+
 
 
         TrajectorySequence Preload = drive.trajectorySequenceBuilder(new Pose2d(-36.00, -65.00, Math.toRadians(90.00)))
